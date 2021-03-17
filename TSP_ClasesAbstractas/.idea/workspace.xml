@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d30319e7-0e19-40f4-8e30-b815834cae5f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/a280.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/berlin52.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/eil101.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/lin318.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/mona-lisa100K.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/pla33810.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/pr1002.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/small10.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/small4.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/small5.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/data/zi929.tsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/out/production/tsp_ntp/Ciudad.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/out/production/tsp_ntp/CiudadPrueba.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/out/production/tsp_ntp/HeuristicaTSP.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/out/production/tsp_ntp/HeuristicaVMC.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/out/production/tsp_ntp/HeuristicaVMCPrueba.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/out/production/tsp_ntp/Problema.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/out/production/tsp_ntp/ProblemaPrueba.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/out/production/tsp_ntp/Ruta.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/out/production/tsp_ntp/Utilidades.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/Ciudad.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/CiudadPrueba.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/HeuristicaTSP.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/HeuristicaVMC.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/HeuristicaVMCPrueba.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/Problema.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/ProblemaPrueba.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/Ruta.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/Utilidades.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/src/Visualizador.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsp_ntp/tsp_ntp.iml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1pKYjJZjagzhJ2jLjbG2XbLeq6o" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TSP_Interfaces" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Analizador" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Analizador" />
+      <module name="TSP_ClasesAbstractas" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Analizador" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d30319e7-0e19-40f4-8e30-b815834cae5f" name="Default Changelist" comment="" />
+      <created>1614933383923</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1614933383923</updated>
+      <workItem from="1614933386042" duration="3599000" />
+      <workItem from="1616008708993" duration="10000" />
+      <workItem from="1616008902949" duration="60000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+</project>
