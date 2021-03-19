@@ -26,7 +26,7 @@ public class Analizador {
 
       // se analiza el problema: se delega la funcionalidad en el
       // dato miembro heuristicaTSP
-      heuristicaTSP.resolver(problema);
+      heuristicaTSP.resolver_funcional(problema);
 
       // se devuelve la ruta optima
       return heuristicaTSP.obtenerOptima();
@@ -60,5 +60,8 @@ public class Analizador {
       // se visualiza la ruta
       Visualizador visualizador = new Visualizador(nombreArchivo, rutaOptimaVMC,
               rutaOptimaMonteC);
+
+      System.out.println("Coste de ruta optima según heurística VMC: " + rutaOptimaVMC.obtenerCoste());
+      System.out.println("Coste de ruta optima según heurística MonteCarlo: " + rutaOptimaMonteC.obtenerCoste());
    }
 }
