@@ -80,7 +80,7 @@ public class HeuristicaVMC extends HeuristicaTSP{
       else{
          // determinar la ciudad mas cercana a la ultima ciudad
          // de la ruta
-         Ciudad masCercana = problema.obtenerMasCercana(ruta);
+         Ciudad masCercana = problema.obtenerMasCercana_funcional(ruta);
 
          // se determina el coste de ir desde fin hasta masCercana
          double distancia = problema.obtenerDistancia(ruta.obtenerFin(),

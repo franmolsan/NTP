@@ -1,4 +1,8 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Representa un recorrido sobre un conjunto
@@ -107,6 +111,29 @@ public class Ruta {
    }
 
    /**
+    * Devuelve dos ArrayList con los valores de las coordenadas
+    * X e Y
+    * adaptado a programación funcional
+    * @return
+    */
+   public ArrayList<ArrayList<Double>> obtenerCoordenadas_funcional(){
+      // se crea el array general
+      ArrayList<ArrayList<Double>> resultado = new ArrayList<>();
+
+      // se crean los arrays para X e Y
+      resultado.add(new ArrayList<Double>());
+      resultado.add(new ArrayList<Double>());
+
+      recorridas.stream().forEach(ciudad -> {
+         resultado.get(0).add(ciudad.obtenerX());
+         resultado.get(1).add(ciudad.obtenerY());
+      });
+
+      // devolver resultado
+      return resultado;
+   }
+
+   /**
     * Devuelve cadena con contenido de la ruta
     * @return
     */
@@ -115,8 +142,29 @@ public class Ruta {
       for(int i=0; i < recorridas.size(); i++){
          salida += recorridas.get(i).obtenerEtiqueta() + " ";
       }
-      salida += "coste: " + coste + "\n";
+      salida += "\nCoste de la ruta: " + coste;
 
       return salida;
+   }
+
+   /**
+    * Devuelve cadena con contenido de la ruta
+    * adaptado a la programación funcional
+    * @return
+    */
+   public String toString_funcional(){
+
+      List<String> salida = new ArrayList<>();
+      salida.add("Ruta: ");
+
+      recorridas.stream().forEach(i -> {
+         salida.add(i.obtenerEtiqueta() + " ");
+      });
+
+      salida.add("\nCoste de la ruta: " + coste);
+
+      // devolvemos salida como string
+      return salida.stream().collect(Collectors.joining());
+
    }
 }

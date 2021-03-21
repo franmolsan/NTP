@@ -42,7 +42,7 @@ public class Visualizador {
       XYSeries datosRuta = new XYSeries("ruta", false);
       
       // se obtienen las coordenadas de las ciudades de la ruta
-      ArrayList<ArrayList<Double>> puntos = ruta.obtenerCoordenadas();
+      ArrayList<ArrayList<Double>> puntos = ruta.obtenerCoordenadas_funcional();
       
       // se agregan los puntos a la serie
       for(int i=0; i < ruta.obtenerLongitud(); i++){
@@ -94,7 +94,7 @@ public class Visualizador {
       XYSeries datosRuta = new XYSeries(nombre, false);
 
       // se obtienen las coordenadas de las ciudades de la ruta
-      ArrayList<ArrayList<Double>> puntos = ruta.obtenerCoordenadas();
+      ArrayList<ArrayList<Double>> puntos = ruta.obtenerCoordenadas_funcional();
 
       // se agregan los puntos a la serie
       for(int i=0; i < ruta.obtenerLongitud(); i++){

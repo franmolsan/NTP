@@ -12,7 +12,7 @@ public class HeuristicaVMCPrueba {
       HeuristicaVMC heuristica = new HeuristicaVMC();
 
       // se resuelve
-      heuristica.resolver(problema);
+      heuristica.resolver_funcional(problema);
 
       // se muestra la ruta optima
       System.out.println(heuristica.obtenerOptima());

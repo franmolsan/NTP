@@ -61,7 +61,11 @@ public class Analizador {
       Visualizador visualizador = new Visualizador(nombreArchivo, rutaOptimaVMC,
               rutaOptimaMonteC);
 
-      System.out.println("Coste de ruta optima según heurística VMC: " + rutaOptimaVMC.obtenerCoste());
-      System.out.println("Coste de ruta optima según heurística MonteCarlo: " + rutaOptimaMonteC.obtenerCoste());
+      System.out.println("Ruta optima según heurística VMC: ");
+      System.out.println(rutaOptimaVMC.toString_funcional());
+
+      System.out.println("Ruta optima según heurística MonteCarlo: ");
+      System.out.println(rutaOptimaMonteC.toString_funcional());
+
    }
 }
