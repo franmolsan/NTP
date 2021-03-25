@@ -1,3 +1,4 @@
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,14 @@ public class Ruta {
    public Ruta(){
       recorridas = new ArrayList<>();
       coste = 0;
+   }
+
+   /**
+    * Constructor de copia
+    */
+   public Ruta(Ruta aCopiar){
+      recorridas = aCopiar.recorridas;
+      coste = aCopiar.coste;
    }
 
    /**
@@ -167,4 +176,58 @@ public class Ruta {
       return salida.stream().collect(Collectors.joining());
 
    }
+
+   /**
+    * Método para calcular el coste de una ruta, por ejemplo, si la hemos cambiado
+    * Utiliza programación funcional
+    * @param problema en el que se almacena la distancia entre las ciudades
+    */
+   public void calcularCosteRuta(Problema problema){
+      // creamos array de costes
+      ArrayList<Double> arrayCostes = new ArrayList<>();
+
+      IntStream.range(1,recorridas.size()).forEach(i -> {
+         Ciudad previa = recorridas.get(i-1);
+         Ciudad siguiente = recorridas.get(i);
+         arrayCostes.add(problema.obtenerDistancia(previa, siguiente));
+      });
+
+      // se agrega el coste de cierre
+      Ciudad inicio = problema.obtenerCiudad(0);
+      Ciudad fin = problema.obtenerCiudad(recorridas.size()-1);
+      double distanciaCierre = problema.obtenerDistancia(inicio, fin);
+      arrayCostes.add(distanciaCierre);
+
+      // calculamos la suma del array de costes
+      coste = arrayCostes.stream().mapToDouble(d -> d).sum();
+   }
+
+   /**
+    * Se intercambian dos ciudades de forma aleatoria
+    * usando programación funcional
+    * @param problema, que contiene las distancias que hay entre cada ciudad
+    */
+   public void intercambiarDosCiudades(Problema problema){
+      SecureRandom random = new SecureRandom();
+
+      // generar dos índices aleatorios (deben ser diferentes)
+      int indice1 = random.nextInt(recorridas.size());
+      int indice2;
+
+      do {
+         indice2 = random.nextInt(recorridas.size());
+      } while (indice1 == indice2);
+
+      // obtenemos las ciudades
+      Ciudad c1 = recorridas.get(indice1);
+      Ciudad c2 = recorridas.get(indice2);
+
+      // las intercambiamos
+      recorridas.set(indice1,c2);
+      recorridas.set(indice2,c1);
+
+      // recalculamos el coste de la ruta porque la hemos cambiado
+      calcularCosteRuta(problema);
+   }
+
 }

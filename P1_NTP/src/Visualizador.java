@@ -77,6 +77,26 @@ public class Visualizador {
    }
 
    /**
+    * Constructor de la clase, recibiendo como argumento
+    * tres rutas
+    */
+   public Visualizador(String nombre, Ruta ruta1, Ruta ruta2, Ruta ruta3) {
+      // se crea la serie de datos
+      coordenadas = new XYSeriesCollection();
+
+      // se copia el titulo
+      titulo=nombre;
+
+      // se crea la serie de datos de la coleccion
+      generarSerie("ruta1", ruta1);
+      generarSerie("ruta2", ruta2);
+      generarSerie("ruta3", ruta3);
+
+      // se muestra el grafico
+      mostrar();
+   }
+
+   /**
     * Metodo privado para crear la ventana con el grafico
     */
    public void mostrar() {

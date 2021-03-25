@@ -38,9 +38,11 @@ public class Analizador {
     */
    public static void main(String args[]){
       String nombreArchivo = "small10.tsp";
+
       // se crea la heuristica
       HeuristicaVMC heuristicaVMC = new HeuristicaVMC();
       HeuristicaMonteCarlo heuristicaMonteC = new HeuristicaMonteCarlo();
+      HeuristicaIntercambio heuristicaIntercambio = new HeuristicaIntercambio();
 
       // se crea el analizador
       Analizador analizador = new Analizador();
@@ -57,15 +59,24 @@ public class Analizador {
       // se resuelve con la nueva heuristica
       Ruta rutaOptimaMonteC = analizador.analizar(nombreArchivo);
 
+      // cambiar la heuristica del analizador
+      analizador.asignarHeuristica(heuristicaIntercambio);
+
+      // se resuelve con la nueva heuristica
+      Ruta rutaOptimaIntercambio = analizador.analizar(nombreArchivo);
+
       // se visualiza la ruta
       Visualizador visualizador = new Visualizador(nombreArchivo, rutaOptimaVMC,
-              rutaOptimaMonteC);
+                  rutaOptimaMonteC, rutaOptimaIntercambio);
 
       System.out.println("Ruta optima según heurística VMC: ");
       System.out.println(rutaOptimaVMC.toString_funcional());
 
       System.out.println("Ruta optima según heurística MonteCarlo: ");
       System.out.println(rutaOptimaMonteC.toString_funcional());
+
+      System.out.println("Ruta optima según heurística de intercambio: ");
+      System.out.println(rutaOptimaIntercambio.toString_funcional());
 
    }
 }
