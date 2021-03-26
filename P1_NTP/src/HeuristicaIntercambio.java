@@ -1,8 +1,5 @@
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.IntConsumer;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -30,12 +27,13 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
      * Dato miembro auxiliar para guardar las rutas aleatorias que
      * se van generando
      */
-    private double coste_medio_ruta = Double.MAX_VALUE;
+    private double costeMedioRuta = Double.MAX_VALUE;
 
     /**
      * Constante que limita el número de veces que se va intentar mejorar una ruta
+     * Asegura que intentamos mejorar una ruta al menos LIMITE_MEJORA veces
      */
-    private final int LIMITE_MEJORA = 1000;
+    private final int LIMITE_MEJORA = 10;
 
     /**
      * Metodo de resolucion a partir del problema
@@ -104,6 +102,9 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
         // y nos quedamos con la primera (la del coste menor)
         Stream<Ruta> rutasOrdenadas = rutas.stream().sorted(Comparator.comparing(Ruta::obtenerCoste));
         rutaOptima = rutasOrdenadas.limit(1).collect(Collectors.toList()).get(0);
+
+        System.out.println("Coste medio de la ruta: " + costeMedioRuta);
+        System.out.println("Coste de la ruta optima: " + rutaOptima.obtenerCoste());
 
     }
 
@@ -182,7 +183,7 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
         double[] costes = rutas.stream().mapToDouble(Ruta::obtenerCoste).toArray();
 
         // calculamos el valor medio del array de costes
-        coste_medio_ruta = Arrays.stream(costes).average().getAsDouble();
+        costeMedioRuta = Arrays.stream(costes).average().getAsDouble();
     }
 
     /**
@@ -192,6 +193,7 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
      */
     private void mejoraRutaIntercambiando (Ruta rutaAMejorar, int numMejora){
 
+        /*
         // creamos una copia de la ruta que queremos mejorar
         Ruta nuevaRuta = new Ruta (rutaAMejorar);
 
@@ -200,11 +202,43 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
 
         // si la nueva ruta es mejor, cambiamos el array de rutas,
         // recalculamos el coste medio
-        // y repetimos el proceso, de forma recursiva (parará cuando no se mejore la ruta)
-        if (nuevaRuta.obtenerCoste() < coste_medio_ruta){
+        // y repetimos el proceso, de forma recursiva
+        if (nuevaRuta.obtenerCoste() < rutaAMejorar.obtenerCoste()){
             rutas.set(rutas.indexOf(rutaAMejorar), nuevaRuta);
             calcularCosteMedioRutas();
             mejoraRutaIntercambiando(nuevaRuta, numMejora+1);
         }
+        // si la nueva ruta no es mejor y no hemos alcanzado el límite de mejoras,
+        // intentamos otro intercambio
+        else if (numMejora < LIMITE_MEJORA) {
+            mejoraRutaIntercambiando(rutaAMejorar, numMejora+1);
+        }
+
+         */
+
+        // si la ruta es buena
+        if (rutaAMejorar.obtenerCoste() < costeMedioRuta){
+            // creamos una copia de la ruta que queremos mejorar
+            Ruta nuevaRuta = new Ruta (rutaAMejorar);
+
+            // realizar intercambio en la ruta
+            nuevaRuta.intercambiarDosCiudades(problema);
+
+            // si la nueva ruta es mejor, cambiamos el array de rutas,
+            // recalculamos el coste medio
+            // y repetimos el proceso, de forma recursiva
+            if (nuevaRuta.obtenerCoste() < rutaAMejorar.obtenerCoste()){
+                rutas.set(rutas.indexOf(rutaAMejorar), nuevaRuta);
+                calcularCosteMedioRutas();
+                mejoraRutaIntercambiando(nuevaRuta, numMejora+1);
+            }
+            // si la nueva ruta no es mejor y no hemos alcanzado el límite de mejoras,
+            // intentamos otro intercambio
+            else if (numMejora < LIMITE_MEJORA) {
+                mejoraRutaIntercambiando(rutaAMejorar, numMejora+1);
+            }
+        }
+
+
     }
 }

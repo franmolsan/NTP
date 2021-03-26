@@ -20,6 +20,8 @@ public class Ruta {
     */
    private double coste;
 
+   SecureRandom random = new SecureRandom();
+
    /**
     * Constructor por defecto
     */
@@ -208,7 +210,6 @@ public class Ruta {
     * @param problema, que contiene las distancias que hay entre cada ciudad
     */
    public void intercambiarDosCiudades(Problema problema){
-      SecureRandom random = new SecureRandom();
 
       // generar dos índices aleatorios (deben ser diferentes)
       int indice1 = random.nextInt(recorridas.size());
