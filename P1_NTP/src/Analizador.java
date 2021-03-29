@@ -26,7 +26,7 @@ public class Analizador {
 
       // se analiza el problema: se delega la funcionalidad en el
       // dato miembro heuristicaTSP
-      heuristicaTSP.resolver_funcional(problema);
+      heuristicaTSP.resolver(problema);
 
       // se devuelve la ruta optima
       return heuristicaTSP.obtenerOptima();
@@ -40,8 +40,8 @@ public class Analizador {
       String nombreArchivo = "berlin52.tsp";
 
       // se crea la heuristica
-      HeuristicaVMC heuristicaVMC = new HeuristicaVMC();
-      HeuristicaMonteCarlo heuristicaMonteC = new HeuristicaMonteCarlo();
+      HeuristicaVMCFuncional heuristicaVMC = new HeuristicaVMCFuncional();
+      HeuristicaMonteCarloFuncional heuristicaMonteC = new HeuristicaMonteCarloFuncional();
       HeuristicaIntercambio heuristicaIntercambio = new HeuristicaIntercambio();
 
       // se crea el analizador

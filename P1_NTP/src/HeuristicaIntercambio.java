@@ -4,36 +4,33 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * Clase para heuristica MonteCarlo
+ * Clase para heuristica de intercambio
+ * Usa programación funcional
  */
-public class HeuristicaIntercambio extends HeuristicaTSP{
+public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
     /**
-     * Dato miembro para guardar el numero de muestras
-     */
-    private int muestras;
-
-    /**
-     * Dato miembro auxiliar para generar soluciones aleatorias
-     */
-    private ArrayList<Integer> indices;
-
-    /**
-     * Dato miembro auxiliar para guardar las rutas aleatorias que
+     * Dato miembro auxiliar para almacenar las rutas aleatorias que
      * se van generando
      */
     private ArrayList<Ruta> rutas;
 
     /**
-     * Dato miembro auxiliar para guardar las rutas aleatorias que
-     * se van generando
+     * Dato miembro para almacenar el coste medio de la ruta
      */
     private double costeMedioRuta = Double.MAX_VALUE;
 
     /**
-     * Constante que limita el número de veces que se va intentar mejorar una ruta
-     * Asegura que intentamos mejorar una ruta al menos LIMITE_MEJORA veces
+     * Constante que indica el número de veces que se va intentar mejorar una ruta
+     * Asegura que intentamos mejorar una ruta al menos NUMERO_MIN_INTERCAMBIOS veces
      */
-    private final int LIMITE_MEJORA = 10;
+    private int NUMERO_MIN_INTERCAMBIOS;
+
+    /**
+     * Constante que limita el número de veces que se va intentar mejorar una ruta
+     * Para evitar que la ejecución sea demasiado larga en problemas de gran dimensión
+     */
+    private int LIMITE_MAXIMO_MEJORA = 300;
+
 
     /**
      * Metodo de resolucion a partir del problema
@@ -44,38 +41,10 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
         // se asigna el problema
         this.problema = problema;
 
-        // asignar el numero de muestras a generar
-        muestras = problema.obtenerDimension() * 100;
-
-        // se genera el array de indices
-        indices = new ArrayList<>();
-        for(int i=0; i < problema.obtenerDimension(); i++){
-            indices.add(i);
-        }
-
-        // se genera solucion aleatoria
-        rutaOptima = generarAleatoria();
-
-        // considerancion de las muestras indicadas
-        for(int i=0; i < muestras; i++){
-            Ruta aleatoria = generarAleatoria();
-
-            // comprobar si hay que actualizar la optima
-            if(rutaOptima.obtenerCoste() > aleatoria.obtenerCoste()){
-                rutaOptima = aleatoria;
-            }
-        }
-    }
-
-
-    /**
-     * Metodo de resolucion a partir del problema
-     * @param problema
-     */
-    @Override
-    public void resolver_funcional(Problema problema) {
-        // se asigna el problema
-        this.problema = problema;
+        // el número mínimo de intercambios toma el valor de la dimensión del problmea
+        // si el problema es muy grande, limitamos su valor al de la constante LIMITE_MAXIMO_MEJORA
+        // para no realizar demasiados intercambios por ruta
+        NUMERO_MIN_INTERCAMBIOS = Integer.min(problema.obtenerDimension(),LIMITE_MAXIMO_MEJORA);
 
         // asignar el numero de muestras a generar
         muestras = problema.obtenerDimension() * 1000;
@@ -87,7 +56,7 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
 
         // generamos colección de rutas aleatorias
         rutas = new ArrayList<>();
-        IntStream.range(0,muestras).forEach(i-> rutas.add(generarAleatoria_funcional()));
+        IntStream.range(0,muestras).forEach(i-> rutas.add(generarAleatoria()));
 
         // calculamos el coste medio de las rutas
         // que nos servirá de referencia para saber si una ruta es buena o mala
@@ -106,71 +75,6 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
         System.out.println("Coste medio de la ruta: " + costeMedioRuta);
         System.out.println("Coste de la ruta optima: " + rutaOptima.obtenerCoste());
 
-    }
-
-    /**
-     * Metodo de generacion de rutas aleatorias
-     * @return
-     */
-    private Ruta generarAleatoria(){
-        Ruta resultado = new Ruta();
-
-        // se desordena el array de indices
-        Collections.shuffle(indices);
-
-        // se van agregando las ciudades en el orden en que
-        // aparecen en indices
-        resultado.agregarCiudad(problema.obtenerCiudad(indices.get(0)), 0);
-
-        // agregamos el resto de ciudades
-        for(int i=1; i < indices.size(); i++){
-            Ciudad previa = problema.obtenerCiudad(indices.get(i-1));
-            Ciudad siguiente = problema.obtenerCiudad(indices.get(i));
-            double distancia = problema.obtenerDistancia(previa, siguiente);
-            resultado.agregarCiudad(siguiente, distancia);
-        }
-
-        // se agrega el coste de cierre
-        Ciudad inicio = problema.obtenerCiudad(indices.get(0));
-        Ciudad fin = problema.obtenerCiudad(indices.get(indices.size()-1));
-        double distanciaCierre = problema.obtenerDistancia(inicio, fin);
-        resultado.agregarCoste(distanciaCierre);
-
-        // se devuelve el resultado
-        return resultado;
-    }
-
-
-    /**
-     * Metodo de generacion de rutas aleatorias
-     * mediante programación funcional
-     * @return
-     */
-    private Ruta generarAleatoria_funcional(){
-        Ruta resultado = new Ruta();
-
-        // se desordena el array de indices
-        Collections.shuffle(indices);
-
-        // se van agregando las ciudades en el orden en que
-        // aparecen en indices
-        resultado.agregarCiudad(problema.obtenerCiudad(indices.get(0)), 0);
-
-        IntStream.range(1,indices.size()).forEach(i -> {
-            Ciudad previa = problema.obtenerCiudad(indices.get(i-1));
-            Ciudad siguiente = problema.obtenerCiudad(indices.get(i));
-            double distancia = problema.obtenerDistancia(previa, siguiente);
-            resultado.agregarCiudad(siguiente, distancia);
-        });
-
-        // se agrega el coste de cierre
-        Ciudad inicio = problema.obtenerCiudad(indices.get(0));
-        Ciudad fin = problema.obtenerCiudad(indices.get(indices.size()-1));
-        double distanciaCierre = problema.obtenerDistancia(inicio, fin);
-        resultado.agregarCoste(distanciaCierre);
-
-        // se devuelve el resultado
-        return resultado;
     }
 
 
@@ -210,11 +114,10 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
         }
         // si la nueva ruta no es mejor y no hemos alcanzado el límite de mejoras,
         // intentamos otro intercambio
-        else if (numMejora < LIMITE_MEJORA) {
+        else if (numMejora < NUMERO_MIN_INTERCAMBIOS) {
             mejoraRutaIntercambiando(rutaAMejorar, numMejora+1);
         }
-
-         */
+        */
 
         // si la ruta es buena
         if (rutaAMejorar.obtenerCoste() < costeMedioRuta){
@@ -229,16 +132,15 @@ public class HeuristicaIntercambio extends HeuristicaTSP{
             // y repetimos el proceso, de forma recursiva
             if (nuevaRuta.obtenerCoste() < rutaAMejorar.obtenerCoste()){
                 rutas.set(rutas.indexOf(rutaAMejorar), nuevaRuta);
-                calcularCosteMedioRutas();
+                //calcularCosteMedioRutas();
                 mejoraRutaIntercambiando(nuevaRuta, numMejora+1);
             }
             // si la nueva ruta no es mejor y no hemos alcanzado el límite de mejoras,
             // intentamos otro intercambio
-            else if (numMejora < LIMITE_MEJORA) {
+            else if (numMejora < NUMERO_MIN_INTERCAMBIOS) {
                 mejoraRutaIntercambiando(rutaAMejorar, numMejora+1);
             }
         }
-
 
     }
 }

@@ -31,39 +31,16 @@ public class HeuristicaVMC extends HeuristicaTSP{
          rutas.add(rutaNueva);
       }
 
-      // tengo coleccion de rutas, 1 por ciudad, y seleccionar
-      // la de menor coste
+      // seleccionar la ruta de menor coste
       seleccionarRuta(rutas);
    }
 
    /**
-    * Resuelve el TSP mediante vecino mas cercano
-    */
-   @Override
-   public void resolver_funcional(Problema problema) {
-      this.problema = problema;
-
-      // creacion de coleccion de rutas (una por ciudad)
-      ArrayList<Ruta> rutas = new ArrayList<>();
-
-      problema.obtenerCiudades().stream().forEach(ciudad -> {
-         Ruta rutaNueva = new Ruta();
-         rutaNueva.agregarCiudad(ciudad,0);
-         completarRuta(rutaNueva);
-         rutas.add(rutaNueva);
-      });
-
-
-      // tengo coleccion de rutas, 1 por ciudad, y seleccionar
-      // la de menor coste
-      seleccionarRuta_funcional(rutas);
-   }
-
-   /**
     * Completa la ruta agregando siempre la ciudad mas cercana
+    * También se usa por la subclase funcional
     * @param ruta
     */
-   private void completarRuta(Ruta ruta){
+   protected void completarRuta(Ruta ruta){
       // determinar si ya esta completa
       if(ruta.obtenerLongitud() == problema.obtenerDimension()){
          // ruta completa: se agrega la distancia entre ciudad
@@ -107,13 +84,4 @@ public class HeuristicaVMC extends HeuristicaTSP{
       }
    }
 
-   /**
-    * Selecciona de la coleccion la ruta de menor coste, versión con programación funcional
-    * @param rutas
-    */
-   private void seleccionarRuta_funcional(ArrayList<Ruta> rutas){
-      rutaOptima = rutas.stream().
-              sorted(Comparator.comparing(Ruta::obtenerCoste)).limit(1). // ordena de menor a mayor
-              collect(Collectors.toList()).get(0);
-   }
 }

@@ -1,23 +1,12 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
 
 /**
  * Clase para heuristica MonteCarlo
  */
-public class HeuristicaMonteCarlo extends HeuristicaTSP{
-   /**
-    * Dato miembro para guardar el numero de muestras
-    */
-   protected int muestras;
-
-   /**
-    * Dato miembro auxiliar para generar soluciones aleatorias
-    */
-   protected ArrayList<Integer> indices;
+public class HeuristicaMonteCarloFuncional extends HeuristicaMonteCarlo{
 
    /**
     * Metodo de resolucion a partir del problema
@@ -29,34 +18,33 @@ public class HeuristicaMonteCarlo extends HeuristicaTSP{
       this.problema = problema;
 
       // asignar el numero de muestras a generar
-      muestras = problema.obtenerDimension() * 100;
+      muestras = problema.obtenerDimension() * 10000;
 
       // se genera el array de indices
       indices = new ArrayList<>();
-      for(int i=0; i < problema.obtenerDimension(); i++){
-         indices.add(i);
-      }
+      IntStream.range(0, problema.obtenerDimension()).
+              forEach(i -> indices.add(i));
 
-      // se genera solucion aleatoria
+      // generamos solución aleatoria inicial
       rutaOptima = generarAleatoria();
 
-      // considerancion de las muestras indicadas
-      for(int i=0; i < muestras; i++){
-         Ruta aleatoria = generarAleatoria();
 
-         // comprobar si hay que actualizar la optima
-         if(rutaOptima.obtenerCoste() > aleatoria.obtenerCoste()){
+      IntConsumer generarRutaAleatoriaYComparar = i -> { Ruta aleatoria = generarAleatoria();
+         if (rutaOptima.obtenerCoste() > aleatoria.obtenerCoste()){
             rutaOptima = aleatoria;
          }
-      }
+      };
+      // generamos muestras y comparamos, quedándonos con la mejor
+      IntStream.range(0,muestras).forEach(generarRutaAleatoriaYComparar);
    }
 
 
    /**
     * Metodo de generacion de rutas aleatorias
-    * versión imperativa
+    * mediante programación funcional
     * @return
     */
+   @Override
    protected Ruta generarAleatoria(){
       Ruta resultado = new Ruta();
 
@@ -67,13 +55,12 @@ public class HeuristicaMonteCarlo extends HeuristicaTSP{
       // aparecen en indices
       resultado.agregarCiudad(problema.obtenerCiudad(indices.get(0)), 0);
 
-      // agregamos el resto de ciudades
-      for(int i=1; i < indices.size(); i++){
+      IntStream.range(1,indices.size()).forEach(i -> {
          Ciudad previa = problema.obtenerCiudad(indices.get(i-1));
          Ciudad siguiente = problema.obtenerCiudad(indices.get(i));
          double distancia = problema.obtenerDistancia(previa, siguiente);
          resultado.agregarCiudad(siguiente, distancia);
-      }
+      });
 
       // se agrega el coste de cierre
       Ciudad inicio = problema.obtenerCiudad(indices.get(0));
@@ -84,5 +71,4 @@ public class HeuristicaMonteCarlo extends HeuristicaTSP{
       // se devuelve el resultado
       return resultado;
    }
-
 }
