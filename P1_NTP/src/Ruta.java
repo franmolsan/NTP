@@ -34,7 +34,7 @@ public class Ruta {
     * Constructor de copia
     */
    public Ruta(Ruta aCopiar){
-      recorridas = aCopiar.recorridas;
+      recorridas = new ArrayList<>(aCopiar.recorridas);
       coste = aCopiar.coste;
    }
 

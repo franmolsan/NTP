@@ -88,8 +88,8 @@ public class Visualizador {
       titulo=nombre;
 
       // se crea la serie de datos de la coleccion
-      generarSerie("ruta1", ruta1);
-      generarSerie("ruta2", ruta2);
+      //generarSerie("ruta1", ruta1);
+      //generarSerie("ruta2", ruta2);
       generarSerie("ruta3", ruta3);
 
       // se muestra el grafico

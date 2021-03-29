@@ -104,7 +104,6 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
      */
     private void mejoraRutaIntercambiando (Ruta rutaAMejorar, int numMejora){
 
-        /*
         // creamos una copia de la ruta que queremos mejorar
         Ruta nuevaRuta = new Ruta (rutaAMejorar);
 
@@ -112,11 +111,9 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
         nuevaRuta.intercambiarDosCiudades(problema);
 
         // si la nueva ruta es mejor, cambiamos el array de rutas,
-        // recalculamos el coste medio
         // y repetimos el proceso, de forma recursiva
         if (nuevaRuta.obtenerCoste() < rutaAMejorar.obtenerCoste()){
             rutas.set(rutas.indexOf(rutaAMejorar), nuevaRuta);
-            calcularCosteMedioRutas();
             mejoraRutaIntercambiando(nuevaRuta, numMejora+1);
         }
         // si la nueva ruta no es mejor y no hemos alcanzado el límite de mejoras,
@@ -124,30 +121,6 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
         else if (numMejora < NUMERO_MIN_INTERCAMBIOS) {
             mejoraRutaIntercambiando(rutaAMejorar, numMejora+1);
         }
-        */
-
-        // si la ruta es buena
-        //if (rutaAMejorar.obtenerCoste() < costeMedioRuta){
-            // creamos una copia de la ruta que queremos mejorar
-            Ruta nuevaRuta = new Ruta (rutaAMejorar);
-
-            // realizar intercambio en la ruta
-            nuevaRuta.intercambiarDosCiudades(problema);
-
-            // si la nueva ruta es mejor, cambiamos el array de rutas,
-            // recalculamos el coste medio
-            // y repetimos el proceso, de forma recursiva
-            if (nuevaRuta.obtenerCoste() < rutaAMejorar.obtenerCoste()){
-                rutas.set(rutas.indexOf(rutaAMejorar), nuevaRuta);
-                // calcularCosteMedioRutas();
-                mejoraRutaIntercambiando(nuevaRuta, numMejora+1);
-            }
-            // si la nueva ruta no es mejor y no hemos alcanzado el límite de mejoras,
-            // intentamos otro intercambio
-            else if (numMejora < NUMERO_MIN_INTERCAMBIOS) {
-                mejoraRutaIntercambiando(rutaAMejorar, numMejora+1);
-            }
-        //}
 
     }
 }
