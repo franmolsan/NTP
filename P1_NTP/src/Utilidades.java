@@ -17,35 +17,4 @@ public class Utilidades {
                        Math.pow(ciudad1.obtenerY() - ciudad2.obtenerY(), 2));
    }
 
-   /**
-    * Metodo de generacion de rutas aleatorias
-    * mediante programación funcional
-    * @return
-    */
-   public static Ruta generarAleatoria_funcional(ArrayList<Integer> indices, Problema problema){
-      Ruta resultado = new Ruta();
-
-      // se desordena el array de indices
-      Collections.shuffle(indices);
-
-      // se van agregando las ciudades en el orden en que
-      // aparecen en indices
-      resultado.agregarCiudad(problema.obtenerCiudad(indices.get(0)), 0);
-
-      IntStream.range(1,indices.size()).forEach(i -> {
-         Ciudad previa = problema.obtenerCiudad(indices.get(i-1));
-         Ciudad siguiente = problema.obtenerCiudad(indices.get(i));
-         double distancia = problema.obtenerDistancia(previa, siguiente);
-         resultado.agregarCiudad(siguiente, distancia);
-      });
-
-      // se agrega el coste de cierre
-      Ciudad inicio = problema.obtenerCiudad(indices.get(0));
-      Ciudad fin = problema.obtenerCiudad(indices.get(indices.size()-1));
-      double distanciaCierre = problema.obtenerDistancia(inicio, fin);
-      resultado.agregarCoste(distanciaCierre);
-
-      // se devuelve el resultado
-      return resultado;
-   }
 }

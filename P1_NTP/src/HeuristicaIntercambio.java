@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -62,6 +63,13 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
         // que nos servirá de referencia para saber si una ruta es buena o mala
         calcularCosteMedioRutas();
 
+        Predicate<Ruta> costeMenorQueMedia = ruta -> (ruta.obtenerCoste() < costeMedioRuta);
+        rutas = (ArrayList<Ruta>) rutas.stream().filter(costeMenorQueMedia).collect(Collectors.toList());
+
+        calcularCosteMedioRutas();
+
+        rutas = (ArrayList<Ruta>) rutas.stream().filter(costeMenorQueMedia).collect(Collectors.toList());
+
         // vamos realizando intercambios en cada ruta, hasta que no mejore
         rutas.forEach(ruta -> {
             mejoraRutaIntercambiando(ruta,0);
@@ -82,7 +90,6 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
      * Método privado para calcular el coste medio de las rutas que tenemos
      */
     private void calcularCosteMedioRutas (){
-
         // obtenemos un array de costes a partir de las rutas
         double[] costes = rutas.stream().mapToDouble(Ruta::obtenerCoste).toArray();
 
@@ -120,7 +127,7 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
         */
 
         // si la ruta es buena
-        if (rutaAMejorar.obtenerCoste() < costeMedioRuta){
+        //if (rutaAMejorar.obtenerCoste() < costeMedioRuta){
             // creamos una copia de la ruta que queremos mejorar
             Ruta nuevaRuta = new Ruta (rutaAMejorar);
 
@@ -132,7 +139,7 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
             // y repetimos el proceso, de forma recursiva
             if (nuevaRuta.obtenerCoste() < rutaAMejorar.obtenerCoste()){
                 rutas.set(rutas.indexOf(rutaAMejorar), nuevaRuta);
-                //calcularCosteMedioRutas();
+                // calcularCosteMedioRutas();
                 mejoraRutaIntercambiando(nuevaRuta, numMejora+1);
             }
             // si la nueva ruta no es mejor y no hemos alcanzado el límite de mejoras,
@@ -140,7 +147,7 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
             else if (numMejora < NUMERO_MIN_INTERCAMBIOS) {
                 mejoraRutaIntercambiando(rutaAMejorar, numMejora+1);
             }
-        }
+        //}
 
     }
 }
