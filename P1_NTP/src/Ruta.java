@@ -195,8 +195,8 @@ public class Ruta {
       });
 
       // se agrega el coste de cierre
-      Ciudad inicio = problema.obtenerCiudad(0);
-      Ciudad fin = problema.obtenerCiudad(recorridas.size()-1);
+      Ciudad inicio = recorridas.get(0);
+      Ciudad fin = recorridas.get(recorridas.size()-1);
       double distanciaCierre = problema.obtenerDistancia(inicio, fin);
       arrayCostes.add(distanciaCierre);
 
