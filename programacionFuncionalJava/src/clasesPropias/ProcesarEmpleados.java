@@ -144,10 +144,10 @@ public class ProcesarEmpleados {
      * Cuenta los trabajadores de cada departamento
      * @return
      */
-    //public TreeMap<String, Long> contarPorDepartamento (){
-        //empleados.stream().collect(Collectors.groupingBy(Empleado::obtenerDepartamento,
-          //      TreeMap::new))
-    //}
+    public TreeMap<String, Long> contarPorDepartamento (){
+        return empleados.stream().collect(Collectors.groupingBy(Empleado::obtenerDepartamento,
+                TreeMap::new, Collectors.counting()));
+    }
 
     /**
      * main de pruebas

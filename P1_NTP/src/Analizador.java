@@ -70,13 +70,15 @@ public class Analizador {
                   rutaOptimaMonteC, rutaOptimaIntercambio);
 
       System.out.println("Ruta optima según heurística VMC: ");
-      System.out.println(rutaOptimaVMC.toString_funcional());
+      System.out.println(rutaOptimaVMC);
 
       System.out.println("Ruta optima según heurística MonteCarlo: ");
-      System.out.println(rutaOptimaMonteC.toString_funcional());
+      System.out.println(rutaOptimaMonteC);
 
       System.out.println("Ruta optima según heurística de intercambio: ");
-      System.out.println(rutaOptimaIntercambio.toString_funcional());
+      System.out.println(rutaOptimaIntercambio);
+      heuristicaIntercambio.imprimirInformacion();
+
 
    }
 }

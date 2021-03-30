@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,8 +31,23 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
      * Constante que limita el número de veces que se va intentar mejorar una ruta
      * Para evitar que la ejecución sea demasiado larga en problemas de gran dimensión
      */
-    private int LIMITE_MAXIMO_MEJORA = 300;
+    private int LIMITE_MAXIMO_MEJORA = 500;
 
+
+    /**
+     *
+     */
+    TreeMap<String, Long> agrupacionCiudadesSegunInicio;
+
+    /**
+     *
+     */
+    long valorMasPopular;
+
+    /**
+     *
+     */
+    String inicioMasPopular;
 
     /**
      * Metodo de resolucion a partir del problema
@@ -60,15 +76,20 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
         IntStream.range(0,muestras).forEach(i-> rutas.add(generarAleatoria()));
 
         // calculamos el coste medio de las rutas
-        // que nos servirá de referencia para saber si una ruta es buena o mala
+        // que nos servirá para filtrar las rutas y quedarnos con las mejores
         calcularCosteMedioRutas();
 
-        Predicate<Ruta> costeMenorQueMedia = ruta -> (ruta.obtenerCoste() < costeMedioRuta);
-        rutas = (ArrayList<Ruta>) rutas.stream().filter(costeMenorQueMedia).collect(Collectors.toList());
+        // filtramos las rutas, y nos quedamos con las mejores
+        // realizaremos más o menos filtrados en función del tamaño del problema
+        int vecesAFiltrar = problema.obtenerDimension()/50 + 1;
+        IntStream.range(0,vecesAFiltrar).forEach(i ->{
+            rutas = filtradoRutasSegunCoste(0,costeMedioRuta);
 
-        calcularCosteMedioRutas();
+            // recalculamos el coste medio
+            calcularCosteMedioRutas();
+        });
 
-        rutas = (ArrayList<Ruta>) rutas.stream().filter(costeMenorQueMedia).collect(Collectors.toList());
+        calcularDatosCiudadesInicio();
 
         // vamos realizando intercambios en cada ruta, hasta que no mejore
         rutas.forEach(ruta -> {
@@ -79,12 +100,53 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
         // y nos quedamos con la primera (la del coste menor)
         Stream<Ruta> rutasOrdenadas = rutas.stream().sorted(Comparator.comparing(Ruta::obtenerCoste));
         rutaOptima = rutasOrdenadas.limit(1).collect(Collectors.toList()).get(0);
-
-        System.out.println("Coste medio de la ruta: " + costeMedioRuta);
-        System.out.println("Coste de la ruta optima: " + rutaOptima.obtenerCoste());
-
     }
 
+
+    /**
+     * Método para imprimir la información sobre el procesamiento que ha realizado la heurística
+     */
+    public void imprimirInformacion(){
+        System.out.println("Información sobre el procesamiento mediante la heurística de intercambio: ");
+        System.out.println("*   Coste medio de la ruta: " + costeMedioRuta);
+        System.out.println("*   Coste de la ruta optima: " + rutaOptima.obtenerCoste());
+        System.out.println("*   Inicialmente se han generado " + muestras + " rutas");
+        System.out.println("*   Se han filtrado las muestras, pasando a considerar las " + rutas.size() + " mejores muestras");
+        System.out.println("*   Para cada una de estas muestras, se han realizado al menos " + NUMERO_MIN_INTERCAMBIOS + " intercambios");
+        System.out.println("*   Agrupación de ciudades " + agrupacionCiudadesSegunInicio );
+        System.out.println("*   La ciudad de inicio que más se repite es " + inicioMasPopular + ", ya que hay " + valorMasPopular +
+                " rutas que empiezan por ella.");
+    }
+
+    private void calcularDatosCiudadesInicio(){
+        agrupacionCiudadesSegunInicio = obtenerAgrupacionSegunInicio();
+        inicioMasPopular = Collections.max(agrupacionCiudadesSegunInicio.entrySet(), Comparator.comparing(Map.Entry::getValue)).getKey();
+        valorMasPopular = agrupacionCiudadesSegunInicio.get(inicioMasPopular).longValue();
+    }
+
+
+    /**
+     * Método privado para filtrar las rutas, obteniendo aquellas cuyo coste está comprendido entre dos valores
+     * @param costeMin
+     * @param costeMax
+     * @return ArrayList de rutas cuyo coste está entre costeMin y costeMax
+     */
+    private ArrayList<Ruta> filtradoRutasSegunCoste (double costeMin, double costeMax){
+        Predicate<Ruta> condicionCoste = ruta -> (ruta.obtenerCoste() >= costeMin &&
+                                                      ruta.obtenerCoste() <= costeMax);
+        return (ArrayList<Ruta>) rutas.stream().filter(condicionCoste).collect(Collectors.toList());
+    }
+
+    /**
+     * Método privado para obtener un diccionario que guarde el número de rutas que empiezan por cada ciudad
+     * @return
+     */
+    private TreeMap<String, Long> obtenerAgrupacionSegunInicio(){
+        TreeMap<String, Long> agrupacion = rutas.stream().map(ruta -> {
+            return ruta.obtenerInicio().obtenerEtiqueta();
+        }).collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()));
+        return agrupacion;
+    }
 
     /**
      * Método privado para calcular el coste medio de las rutas que tenemos
@@ -121,6 +183,6 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
         else if (numMejora < NUMERO_MIN_INTERCAMBIOS) {
             mejoraRutaIntercambiando(rutaAMejorar, numMejora+1);
         }
-
     }
+
 }

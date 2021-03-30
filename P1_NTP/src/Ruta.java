@@ -146,24 +146,10 @@ public class Ruta {
 
    /**
     * Devuelve cadena con contenido de la ruta
-    * @return
-    */
-   public String toString(){
-      String salida = "Ruta: ";
-      for(int i=0; i < recorridas.size(); i++){
-         salida += recorridas.get(i).obtenerEtiqueta() + " ";
-      }
-      salida += "\nCoste de la ruta: " + coste;
-
-      return salida;
-   }
-
-   /**
-    * Devuelve cadena con contenido de la ruta
     * adaptado a la programación funcional
     * @return
     */
-   public String toString_funcional(){
+   public String toString(){
 
       List<String> salida = new ArrayList<>();
       salida.add("Ruta: ");
