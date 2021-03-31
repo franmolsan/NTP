@@ -37,7 +37,7 @@ public class Analizador {
     * @param args
     */
    public static void main(String args[]){
-      String nombreArchivo = "berlin52.tsp";
+      String nombreArchivo = "small10.tsp";
 
       // se crea la heuristica
       HeuristicaVMCFuncional heuristicaVMC = new HeuristicaVMCFuncional();
@@ -78,7 +78,5 @@ public class Analizador {
       System.out.println("Ruta optima según heurística de intercambio: ");
       System.out.println(rutaOptimaIntercambio);
       heuristicaIntercambio.imprimirInformacion();
-
-
    }
 }

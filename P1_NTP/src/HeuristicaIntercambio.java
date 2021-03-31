@@ -8,6 +8,8 @@ import java.util.stream.Stream;
 /**
  * Clase para heuristica de intercambio
  * Usa programación funcional
+ * Hereda de HeuristicaMonteCarloFuncional
+ * para que pueda usar el método de generación de rutas aleatorias de dicha clase
  */
 public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
     /**
@@ -35,17 +37,17 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
 
 
     /**
-     *
+     * Dato miembro para almacenar la agrupación que hacemos de las rutas según su ciudad de inicio
      */
-    TreeMap<String, Long> agrupacionCiudadesSegunInicio;
+    TreeMap<String, Long> agrupacionSegunInicio;
 
     /**
-     *
+     * Dato miembro para guardar el número de rutas que empiezan en la ciudad de incio más popular
      */
     long valorMasPopular;
 
     /**
-     *
+     * Dato miembro para guardar la etiqueta de la ciudad de inicio más popular
      */
     String inicioMasPopular;
 
@@ -89,7 +91,9 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
             calcularCosteMedioRutas();
         });
 
-        calcularDatosCiudadesInicio();
+        // realizamos la agrupación por ciudades y buscamos las más popular
+        // antes de realizar los intercambios
+        calcularCiudadInicioMasPopular();
 
         // vamos realizando intercambios en cada ruta, hasta que no mejore
         rutas.forEach(ruta -> {
@@ -113,15 +117,18 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
         System.out.println("*   Inicialmente se han generado " + muestras + " rutas");
         System.out.println("*   Se han filtrado las muestras, pasando a considerar las " + rutas.size() + " mejores muestras");
         System.out.println("*   Para cada una de estas muestras, se han realizado al menos " + NUMERO_MIN_INTERCAMBIOS + " intercambios");
-        System.out.println("*   Agrupación de ciudades " + agrupacionCiudadesSegunInicio );
+        System.out.println("*   Agrupación de ciudades: " + agrupacionSegunInicio);
         System.out.println("*   La ciudad de inicio que más se repite es " + inicioMasPopular + ", ya que hay " + valorMasPopular +
                 " rutas que empiezan por ella.");
     }
 
-    private void calcularDatosCiudadesInicio(){
-        agrupacionCiudadesSegunInicio = obtenerAgrupacionSegunInicio();
-        inicioMasPopular = Collections.max(agrupacionCiudadesSegunInicio.entrySet(), Comparator.comparing(Map.Entry::getValue)).getKey();
-        valorMasPopular = agrupacionCiudadesSegunInicio.get(inicioMasPopular).longValue();
+    /**
+     * Método privado para calcular la ciudad de incio más popular,
+     */
+    private void calcularCiudadInicioMasPopular(){
+        agrupacionSegunInicio = obtenerAgrupacionSegunInicio();
+        inicioMasPopular = Collections.max(agrupacionSegunInicio.entrySet(), Comparator.comparing(Map.Entry::getValue)).getKey();
+        valorMasPopular = agrupacionSegunInicio.get(inicioMasPopular).longValue();
     }
 
 
@@ -142,6 +149,10 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
      * @return
      */
     private TreeMap<String, Long> obtenerAgrupacionSegunInicio(){
+        // pasamos del stream de rutas a un stream de etiquetas de ciudades de inicio
+        // luego lo guardamos en un diccionario con entradas de tipo < String, Long >
+        // la cadena almacena la etiqueta de la ciudad
+        // el long almacena el número de rutas que empiezan por dicha ciudad
         TreeMap<String, Long> agrupacion = rutas.stream().map(ruta -> {
             return ruta.obtenerInicio().obtenerEtiqueta();
         }).collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()));
@@ -179,10 +190,12 @@ public class HeuristicaIntercambio extends HeuristicaMonteCarloFuncional{
             mejoraRutaIntercambiando(nuevaRuta, numMejora+1);
         }
         // si la nueva ruta no es mejor y no hemos alcanzado el límite de mejoras,
-        // intentamos otro intercambio
+        // intentamos otro intercambio en la ruta inicial
         else if (numMejora < NUMERO_MIN_INTERCAMBIOS) {
             mejoraRutaIntercambiando(rutaAMejorar, numMejora+1);
         }
+
+        // en otro caso, se para la recursión
     }
 
 }

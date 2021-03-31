@@ -192,7 +192,6 @@ public class Ruta {
 
    /**
     * Se intercambian dos ciudades de forma aleatoria
-    * usando programación funcional
     * @param problema, que contiene las distancias que hay entre cada ciudad
     */
    public void intercambiarDosCiudades(Problema problema){
