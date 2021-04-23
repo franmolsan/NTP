@@ -15,6 +15,13 @@ object trianguloPascal {
       else factorial(num-1, acum*num)
   }
 
+  /***
+   * Función que calcula el valor del triángulo de pascal
+   * en una posición (fila, col) determinada
+   * @param fila
+   * @param col
+   * @return el valor del triángulo de pascal en la posición
+   */
   def calcularValorTrianguloPascal(fila: BigInt, col: BigInt): BigInt = {
     val divisor =  factorial(col)*(factorial(fila-col))
     factorial(fila)/divisor
