@@ -129,19 +129,45 @@ object seriesRecurrentes {
 
     // generamos la serie con los dos términos iniciales
     val primerTermino = 2
-    val segundoTermino = 6
+    val segundoTermino = 2
     val serie : Array[Int] = Array(primerTermino,segundoTermino)
 
     // función para conseguir el siguiente término a partir de los dos anteriores
-    val funcionPell : (Int, Int) => Int = _+2*_
+    val funcionPellLucas : (Int, Int) => Int = _+2*_
 
     // generamos función específica
     // a partir de la función genérica,
     // especificando la forma de obtener el término siguiente
-    val generadorPell = generadorSerie(funcionPell)_
+    val generadorPellLucas = generadorSerie(funcionPellLucas)_
+
+    // llamamos a la función específica que genera la serie de Pell-Lucas
+    generadorPellLucas(serie, tope)
+  }
+
+  /**
+   * Función específica para generar la serie de Jacobsthal
+   * Se especifican los términos iniciales
+   * Y la función con la que conseguimos los términos sucesivos
+   * @param tope Límite en el que paramos de generar la serie, tiene como valor por defecto 10
+   * @return la serie de Jacobsthal en forma de Array.
+   */
+  def serieJacobsthal (tope : Int = 10) : Array[Int] = {
+
+    // generamos la serie con los dos términos iniciales
+    val primerTermino = 0
+    val segundoTermino = 1
+    val serie : Array[Int] = Array(primerTermino,segundoTermino)
+
+    // función para conseguir el siguiente término a partir de los dos anteriores
+    val funcionJacobsthal : (Int, Int) => Int = 2*_+_
+
+    // generamos función específica
+    // a partir de la función genérica,
+    // especificando la forma de obtener el término siguiente
+    val generadorJacobsthal = generadorSerie(funcionJacobsthal)_
 
     // llamamos a la función específica que genera la serie de Pell
-    generadorPell(serie, tope)
+    generadorJacobsthal(serie, tope)
   }
 
   /***
@@ -154,5 +180,7 @@ object seriesRecurrentes {
     println("Fibonacci: " + serieFibonacci(15).mkString(" "))
     println("Lucas: " + serieLucas(15).mkString(" "))
     println("Pell: " + seriePell(15).mkString(" "))
+    println("Pell-Lucas: " + seriePellLucas(15).mkString(" "))
+    println("Jacobsthal: " + serieJacobsthal(15).mkString(" "))
   }
 }
