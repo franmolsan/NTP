@@ -19,7 +19,9 @@ object contadorCambiosMoneda {
       }
     }
 
-    go(0, List(monedas.head), List(List()))
+    val listaFinal = go(0, List(monedas.head), List(List()))
+    if (listaFinal.nonEmpty) listaFinal.tail
+    else listaFinal
   }
 
 
@@ -57,7 +59,7 @@ object contadorCambiosMoneda {
 
   def main(args: Array[String]) ={
 
-    val listaPosiblesCambios = listarCambiosPosibles(7,List(1,2,4,6))
+    val listaPosiblesCambios = listarCambiosPosibles(4,List(1,2,4,6))
 
     println(listaPosiblesCambios)
   }
