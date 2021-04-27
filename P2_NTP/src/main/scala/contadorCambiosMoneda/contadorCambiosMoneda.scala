@@ -101,7 +101,6 @@ object contadorCambiosMoneda {
 
       // podemos utilizar alguna moneda
       else {
-
         // definimos una moneda preferente, que sera la primera moneda que nos han pasado
         val monedaPref =
             // si no hemos usado todavia la primera moneda que nos han pasado, usarla
