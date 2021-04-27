@@ -5,6 +5,7 @@ import balanceoCadenas.chequearBalance
 
 
 class balanceoCadenaTest extends AnyFunSuite {
+
   // prueba 1
   test("chequear balance: (if (zero? x) max (/ 1 x)) esta balanceada") {
       assert(chequearBalance("(if (zero? x) max (/ 1 x))".toList))

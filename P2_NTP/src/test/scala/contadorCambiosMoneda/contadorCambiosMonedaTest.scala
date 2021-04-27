@@ -1,28 +1,56 @@
 package contadorCambiosMoneda
 
-import org.scalacheck.Prop.forAll
-import org.scalacheck.{Gen, Properties}
+import org.scalatest.funsuite.AnyFunSuite
+import contadorCambiosMoneda.listarCambiosPosibles
 
-object contadorCambiosMonedaTest extends Properties("Prueba del contador de cambios de moneda"){
+class contadorCambiosMonedaTest extends AnyFunSuite {
 
-  val CAMBIO_MINIMO = 10
-  val CAMBIO_MAXIMO = CAMBIO_MINIMO * 2
-  val MONEDA_MENOR = 1
-  val MONEDA_MAYOR = 2
+  // prueba 1
+  test("comprobar cambio de 4 con monedas de tipo 1 y 2") {
+    val cambios: List[List[Int]] = listarCambiosPosibles(4,List(1,2))
+    assert(cambios.forall(_.sum == 4))
+  }
 
-  val datosGenerados: Gen[(Int, List[Int])] = for {
-    cantidadADevolver <- Gen.choose(CAMBIO_MINIMO, CAMBIO_MAXIMO)
-    posiblesMonedas <- Gen.containerOf[List, Int](Gen.choose(MONEDA_MENOR,MONEDA_MAYOR))
-  } yield (cantidadADevolver,posiblesMonedas)
+  // Prueba 2
+  test("comprobar cambio de 6 con monedas de tipo 1, 2 y 4") {
+    val cambios: List[List[Int]] = listarCambiosPosibles(6,List(1,2,4))
+    assert(cambios.forall(_.sum == 6))
+  }
 
-  property ("Todos los cambios suman la cantidad a devolver") = {
-    forAll(datosGenerados) { datos =>
-      println("cantidad a devolver " + datos._1)
-      println("monedas disponibles " + datos._2 )
-      val cambios = contadorCambiosMoneda.listarCambiosPosibles(datos._1, datos._2)
+  // Prueba 3
+  test("comprobar cambio de 7 con monedas de tipo 1, 2, 4 y 6") {
+    val cambios: List[List[Int]] = listarCambiosPosibles(7,List(1,2,4,6))
+    assert(cambios.forall(_.sum == 7))
+  }
 
-      cambios.foreach(_.sum) == datos._1
-    }
+  // Prueba 4
+  test("comprobar cambio de 8 con monedas de tipo 1 y 4") {
+    val cambios: List[List[Int]] = listarCambiosPosibles(8,List(1,4))
+    assert(cambios.forall(_.sum == 8))
+  }
+
+  // Prueba 5
+  test("comprobar cambio de 20 con monedas de tipo 1, 2 y 7") {
+    val cambios: List[List[Int]] = listarCambiosPosibles(20,List(1,2,7))
+    assert(cambios.forall(_.sum == 20))
+  }
+
+  // Prueba 6
+  test("comprobar cambio de 30 con monedas de tipo 5 y 6") {
+    val cambios: List[List[Int]] = listarCambiosPosibles(30, List(5,6))
+    assert(cambios.forall(_.sum == 30))
+  }
+
+  // Prueba 7
+  test("comprobar cambio de 70 con monedas de tipo 2, 50 y 100") {
+    val cambios: List[List[Int]] = listarCambiosPosibles(70, List(2,50,100))
+    assert(cambios.forall(_.sum == 70))
+  }
+
+  // Prueba 8
+  test("comprobar cambio de 10 con monedas de tipo 5 y 6") {
+    val cambios: List[List[Int]] = listarCambiosPosibles(10, List(5,6))
+    assert(cambios.forall(_.sum == 10))
   }
 
 }
