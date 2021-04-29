@@ -4,7 +4,7 @@ package trianguloPascal
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Gen, Properties}
 
-object trianguloPascalTest extends Properties("Prueba del triangulo de pascal"){
+object trianguloPascalCheck extends Properties("Prueba del triangulo de pascal"){
 
   val MAXIMO = 10;
   // generamos el valor de fila y de la columna para obtener los bordes.
