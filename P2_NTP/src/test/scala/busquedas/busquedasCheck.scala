@@ -1,34 +1,51 @@
 package busquedas
 
 import busquedas.busquedasGenericas.{busquedaASaltos, busquedaBinaria}
-import org.scalacheck.Prop.forAll
-import org.scalacheck.{Gen, Properties}
+import org.scalacheck.Prop.{collect, forAll}
+import org.scalacheck.{Gen, Prop, Properties}
 
-object busquedasCheck extends Properties("Prueba de las búsquedas genéricas"){
+import scala.util.Random
+
+object busquedasCheck extends Properties("Pruebas búsquedas"){
 
   val MINIMO = 1;
-  val MAXIMO = 30;
+  val MAXIMO = 100;
 
-  // val arrayOrdenadoInt : Gen[Array[Int]] = Gen.containerOf[Set, Int](Gen.posNum[Int]).map(_.toArray).map(_.sorted)
-  // val arrayOrdenadoInt : Gen[Array[Int]] = Gen.sized(Gen.choose(MINIMO,MAXIMO))(Gen.containerOf[Array, Int](Gen.posNum[Int]).map(_.toArray).map(_.sorted))
+  val intAleatorio = Random.between(MINIMO,MAXIMO)
+  val tamAleatorio = Random.between(MINIMO,MAXIMO)
 
-  val genArrayOrdenado = Gen.sized { tam  =>
-    val size = tam
+  /*
+    val genArrayOrdenado = Gen.sized { tam  =>
+    val size = tam+1
     for {
-      listaInt <- Gen.listOfN(size, Gen.posNum[Int])
+      listaInt <-
       arrayOrdenado <- listaInt.sorted.toArray
     } yield arrayOrdenado
   }
+   */
 
-  property ("Las búsquedas binaria, a saltos y propia de la clase coinciden") = {
-    forAll(genArrayOrdenado) { coleccion =>
-      coleccion.forall({
-        println("colección " + coleccion.toString)
-        val aBuscar = coleccion(_)
-        busquedaASaltos(coleccion,aBuscar)(_>_) == busquedaBinaria(coleccion,aBuscar)(_>_) == coleccion.indexOf(aBuscar)
-      })
+  val genArrayOrdenado = for {
+    lista <- Gen.listOfN(tamAleatorio, Gen.posNum[Int])
+    arrayOrdenado <- lista.toArray.sorted
+  } yield arrayOrdenado
 
+
+  property ("Las búsqueda de la clase y a saltos coinciden") = {
+    forAll(genArrayOrdenado) { coleccion => {
+        busquedaASaltos(coleccion,intAleatorio)(_>_) == coleccion.indexOf(intAleatorio)
+      }
     }
   }
+
+  property ("Las búsqueda de la clase y binaria coinciden") = {
+    forAll(genArrayOrdenado) { coleccion => {
+      val resultadoBinaria = busquedaBinaria(coleccion,intAleatorio)(_>_)
+      val resultaddoClase = coleccion.indexOf(intAleatorio)
+        println(resultadoBinaria + "vs" + resultaddoClase)
+      resultadoBinaria == resultaddoClase
+      }
+    }
+  }
+
 
 }
