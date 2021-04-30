@@ -29,7 +29,7 @@ object busquedasGenericas {
       val mitad = (limiteSuperior + limiteInferior)/2
 
       // si el elemento de la mitad es el que buscamos, devolvemos el índice
-      if (collection(mitad) == aBuscar)  mitad //go(mitad/2+1, mitad+mitad/2-1)
+      if (collection(mitad) == aBuscar)  mitad
 
       // si el elemento de la mitad es mayor (el criterio es >)
       // aumentamos los límites, por lo que en la siguiente ejecución
@@ -71,14 +71,13 @@ object busquedasGenericas {
 
       val elementoFinalBloque = collection(limiteSuperiorBloque)
 
+      // el elemento final es el que buscamos, por lo que devolvemos su índice
+      if (elementoFinalBloque == aBuscar) limiteSuperiorBloque
+
       // si el elemento buscado es menor que el elemento final del bloque
-      // o el elemento final coincide con el buscado
       // estamos en el bloque "correcto" por lo que
       // realizamos una búsqueda lineal del bloque
-      // aunque el elemento final coincida con el buscado tenemos
-      // que analizar el bloque, ya que así nos aseguramos de quedarnos con la primera ocurrencia
-      // (por si hubiera repetidas)
-       if (criterio(elementoFinalBloque,aBuscar) || elementoFinalBloque == aBuscar)
+       else if (criterio(elementoFinalBloque,aBuscar))
         busquedaLinealBloque(limiteSuperiorBloque-tamBloque+1, limiteSuperiorBloque)
 
       // si el elemento buscado es mayor que el elemento final del bloque

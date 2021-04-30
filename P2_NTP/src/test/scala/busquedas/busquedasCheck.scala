@@ -32,7 +32,11 @@ object busquedasCheck extends Properties("Pruebas búsquedas"){
 
   property ("Las búsqueda de la clase y a saltos coinciden") = {
     forAll(genArrayOrdenado) { coleccion => {
-        busquedaASaltos(coleccion,intAleatorio)(_>_) == coleccion.indexOf(intAleatorio)
+      val resultadoASaltos = busquedaASaltos(coleccion,intAleatorio)(_>_)
+      val resultadoClase = coleccion.indexOf(intAleatorio)
+      // comprobamos si el resultado coincide o si el elemento es el mismo
+      // puede que el índice que ambos métodos nos devuelvan no coincidan si el elemento a buscar está repetido
+      resultadoASaltos == resultadoClase || coleccion(resultadoASaltos) == coleccion(resultadoClase)
       }
     }
   }
@@ -41,8 +45,9 @@ object busquedasCheck extends Properties("Pruebas búsquedas"){
     forAll(genArrayOrdenado) { coleccion => {
       val resultadoBinaria = busquedaBinaria(coleccion,intAleatorio)(_>_)
       val resultaddoClase = coleccion.indexOf(intAleatorio)
-        println(resultadoBinaria + "vs" + resultaddoClase)
-      resultadoBinaria == resultaddoClase
+      // comprobamos si el resultado coincide o si el elemento es el mismo
+      // puede que el índice que ambos métodos nos devuelvan no coincidan si el elemento a buscar está repetido
+      resultadoBinaria == resultaddoClase || coleccion(resultadoBinaria) == coleccion(resultaddoClase)
       }
     }
   }
