@@ -10,7 +10,7 @@ object seriesRecurrentes {
    * @param tope límite en el que se para de generar la serie
    * @return la serie, en forma de array
    */
-  def generadorSerie (generadorSiguiente: (Int, Int) => Int)(serie : Array[Int], tope : Int) : Array[Int] = {
+  def calcularSerie (generadorSiguiente: (Int, Int) => Int)(n: Int, primero: Int, segundo: Int) : Int = {
 
     /**
      * Función interna tail recursive
@@ -21,23 +21,22 @@ object seriesRecurrentes {
      * @return
      */
     @annotation.tailrec
-    def go (serie : Array[Int], acum : Int): Array[Int] ={
+    def go (n: Int, previo: Int, actual: Int): Int ={
 
-      // si llegamos al tope, parar la recursividad
-      if (acum == tope) serie
-      // si no estamos en el tope
+      // si hemos calculado el elemento que nos han pedido, devolverlo
+      if (n == 0) actual
+      // si no, seguir la recursividad.
       else {
         // generamos el siguiente término pasándole los dos anteriores
-        // (que son los dos últimos de la serie)
-        val nuevoDato : Int = generadorSiguiente(serie(serie.length-2),serie(serie.length-1))
+        val nuevoDato : Int = generadorSiguiente(previo,actual)
 
         // recursividad, aumentando el acumulador y añadiendo el térrmino generado a la serie
-        go(serie:+nuevoDato,acum+1)
+        go(n-1,actual,nuevoDato)
       }
     }
 
     //desencadenar la recursividad
-    go(serie, 0)
+    go(n,segundo,primero)
   }
 
   /**
