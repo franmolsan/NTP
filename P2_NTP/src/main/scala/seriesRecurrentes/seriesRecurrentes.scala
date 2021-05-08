@@ -57,7 +57,7 @@ object seriesRecurrentes {
    *          Empieza en 1 (es decir, que el primer elemento de la serie es el 1, no el 0)
    * @return El elemento n de la serie de Fibonacci (si n<1, se devolverá -1)
    */
-  def serieFibonacci (n : Int = 10) : Int = {
+  def serieFibonacci (n : Int) : Int = {
 
     // especificamos los dos términos iniciales
     val primerTermino = 0
@@ -83,7 +83,7 @@ object seriesRecurrentes {
    *          Empieza en 1 (es decir, que el primer elemento de la serie es el 1, no el 0)
    * @return El elemento n de la serie de Lucas (si n<1, se devolverá -1)
    */
-  def serieLucas (n : Int = 10) : Int = {
+  def serieLucas (n : Int) : Int = {
 
     // generamos la serie con los dos términos iniciales
     val primerTermino = 2
@@ -109,7 +109,7 @@ object seriesRecurrentes {
    *          Empieza en 1 (es decir, que el primer elemento de la serie es el 1, no el 0)
    * @return El elemento n de la serie de Pell (si n<1, se devolverá -1)
    */
-  def seriePell (n : Int = 10) : Int = {
+  def seriePell (n : Int) : Int = {
 
     // generamos la serie con los dos términos iniciales
     val primerTermino = 2
@@ -135,7 +135,7 @@ object seriesRecurrentes {
    *          Empieza en 1 (es decir, que el primer elemento de la serie es el 1, no el 0)
    * @return El elemento n de la serie de Pell-Lucas (si n<1, se devolverá -1)
    */
-  def seriePellLucas (n : Int = 10) : Int = {
+  def seriePellLucas (n : Int) : Int = {
 
     // generamos la serie con los dos términos iniciales
     val primerTermino = 2
@@ -161,7 +161,7 @@ object seriesRecurrentes {
    *          Empieza en 1 (es decir, que el primer elemento de la serie es el 1, no el 0)
    * @return El elemento n de la serie de Jacobsthal (si n<1, se devolverá -1)
    */
-  def serieJacobsthal (n : Int = 10) : Int = {
+  def serieJacobsthal (n : Int) : Int = {
 
     // generamos la serie con los dos términos iniciales
     val primerTermino = 0
@@ -187,7 +187,7 @@ object seriesRecurrentes {
   def main(args: Array[String]) ={
     println("Series definidas de forma recurrente")
 
-    val n : Int = 5;
+    val n : Int = 10;
     println(s"Termino $n de la serie de Fibonacci: ${serieFibonacci(n)}")
     println(s"Termino $n de la serie de Lucas: ${serieLucas(n)}")
     println(s"Termino $n de la serie de Pell: ${seriePell(n)}")
