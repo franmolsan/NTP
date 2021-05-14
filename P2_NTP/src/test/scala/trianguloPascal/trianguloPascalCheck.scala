@@ -4,7 +4,7 @@ package trianguloPascal
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Gen, Properties}
 
-object trianguloPascalCheck extends Properties("Prueba del triangulo de pascal"){
+object trianguloPascalCheck extends Properties("TrianguloPascal Check"){
 
   val MAXIMO = 10;
   // generamos el valor de fila y de la columna para obtener los bordes.
@@ -39,8 +39,6 @@ object trianguloPascalCheck extends Properties("Prueba del triangulo de pascal")
       resultado == 1
     }}
   }
-
-
 
   property (" Valores internos son iguales a la suma de los dos elementos superiores") = {
     forAll(coordenadasInternas) { (i) => {

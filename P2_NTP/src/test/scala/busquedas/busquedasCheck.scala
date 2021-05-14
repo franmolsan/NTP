@@ -14,15 +14,6 @@ object busquedasCheck extends Properties("Pruebas búsquedas"){
   val intAleatorio = Random.between(MINIMO,MAXIMO)
   val tamAleatorio = Random.between(MINIMO,MAXIMO)
 
-  /*
-    val genArrayOrdenado = Gen.sized { tam  =>
-    val size = tam+1
-    for {
-      listaInt <-
-      arrayOrdenado <- listaInt.sorted.toArray
-    } yield arrayOrdenado
-  }
-   */
 
   val genArrayOrdenado = for {
     lista <- Gen.listOfN(tamAleatorio, Gen.posNum[Int])

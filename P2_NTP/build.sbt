@@ -1,4 +1,4 @@
-name := "P2_NTP"
+name := "P2_NTP_FranciscoJoseMolinaSanchez"
 
 version := "0.1"
 

@@ -136,13 +136,15 @@ object busquedasGenericas {
    * @param args
    */
   def main(args: Array[String]) ={
-    val arrayBusqueda : Array[Int] =  Array.range(1,20)
-    val posEncontradoBinaria = busquedaBinaria(arrayBusqueda,15)(_>_)
-    val posEncontradoASaltos = busquedaASaltos(arrayBusqueda,15)(_>_)
 
-    println("Buscamos el número 15 en el vector 1-20 ")
+    val aBuscar: Int = 15;
+    val arrayBusqueda : Array[Int] =  Array.range(1,20)
+    val posEncontradoBinaria = busquedaBinaria(arrayBusqueda,aBuscar)(_>_)
+    val posEncontradoASaltos = busquedaASaltos(arrayBusqueda,aBuscar)(_>_)
+
+    println(s"Buscamos el número $aBuscar en el vector 1-20 ")
     println("Posición método búsqueda binaria: " + posEncontradoBinaria)
-    println("Posicion método estándar " + arrayBusqueda.indexOf(15))
+    println("Posicion método estándar " + arrayBusqueda.indexOf(aBuscar))
     println("Posición método búsqueda a saltos " + posEncontradoASaltos)
   }
 }

@@ -17,19 +17,19 @@ object busquedasBenchmark extends App {
   
   // generar intervalos de forma aleatoria
   val generador = new Random
-  val IntArrayYElementoABuscar: List[(Array[Int], Int)] = (1 until 100).map(index => {
-    val arrayAleatorio: Array[Int] = List.fill(index)(generador.nextInt(1000)).toArray.sorted
+  val IntArrayYElementoABuscar: List[(Array[Int], Int)] = (1 until 5000).map(index => {
+    val arrayAleatorio: Array[Int] = List.fill(index)(generador.nextInt(5000)).toArray.sorted
     val aBuscar = generador.nextInt(1000)
     (arrayAleatorio, aBuscar)
   }).toList
 
-  val CharArrayYElementoABuscar: List[(Array[Char], Char)] = (1 until 100).map(index => {
+  val CharArrayYElementoABuscar: List[(Array[Char], Char)] = (1 until 5000).map(index => {
     val arrayAleatorio: Array[Char] = List.fill(index)(generador.nextPrintableChar()).toArray.sorted
     val aBuscar = generador.nextPrintableChar()
     (arrayAleatorio, aBuscar)
   }).toList
 
-  val DoubleArrayYElementoABuscar: List[(Array[Double], Double)] = (1 until 100).map(index => {
+  val DoubleArrayYElementoABuscar: List[(Array[Double], Double)] = (1 until 5000).map(index => {
     val arrayAleatorio: Array[Double] = List.fill(index)(generador.nextDouble()).toArray.sorted
     val aBuscar = generador.nextDouble()
     (arrayAleatorio, aBuscar)

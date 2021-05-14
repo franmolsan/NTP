@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/P2_NTP.iml" filepath="$PROJECT_DIR$/.idea/modules/P2_NTP.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/P2_NTP-build.iml" filepath="$PROJECT_DIR$/.idea/modules/P2_NTP-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/P2_NTP_FranciscoJoseMolinaSanchez.iml" filepath="$PROJECT_DIR$/.idea/modules/P2_NTP_FranciscoJoseMolinaSanchez.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/P2_NTP_FranciscoJoseMolinaSanchez-build.iml" filepath="$PROJECT_DIR$/.idea/modules/P2_NTP_FranciscoJoseMolinaSanchez-build.iml" />
     </modules>
   </component>
 </project>
