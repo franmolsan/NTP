@@ -26,6 +26,7 @@ object Personajes extends App{
   val personaje4 = personaje1.copy("Sauron")
   println(personaje4)
 
+  personaje4.heroe;
   // se dispone de un metodo unapply (contrario a apply): despieza el objeto
   // y compone una tupla
   val resultado: Option[(String, Boolean)] = Personaje.unapply(personaje4)
