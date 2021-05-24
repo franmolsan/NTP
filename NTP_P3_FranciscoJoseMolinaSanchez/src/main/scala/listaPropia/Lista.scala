@@ -115,7 +115,18 @@ object Lista extends App {
    * @tparam B
    * @return
    */
-  def foldRight[A, B](lista : Lista[A], neutro : B)(funcion : (A, B) => B): B = ???
+  def foldRight[A, B](lista : Lista[A], neutro : B)(funcion : (A, B) => B): B = {
+
+    println("recibo lista: " + lista)
+    println("recibo neutro: " +  neutro)
+
+    if (longitud(lista)==0) neutro
+    else {
+      lista match {
+        case Cons(cabeza, cola) => foldRight(cola, funcion(cabeza, neutro))(funcion)
+      }
+    }
+  }
 
   /**
    * Suma mediante foldRight
@@ -189,8 +200,14 @@ object Lista extends App {
    * @tparam B parametro de tipo del elemento neutro
    * @return
    */
-  //@annotation.tailrec
-  //def foldLeft[A, B](lista : Lista[A], neutro: B)(funcion : (B, A) => B): B = ???
+
+  @annotation.tailrec
+  def foldLeft[A, B](lista : Lista[A], neutro: B)(funcion : (B, A) => B): B = {
+    lista match {
+      case Nil => neutro
+      case Cons(cabeza,cola) => foldLeft(cola,funcion(neutro,cabeza))(funcion)
+    }
+  }
 
   val Lista1: Lista[Int] = Lista(1,2,3)
   println("Lista: " + Lista1)
@@ -203,5 +220,8 @@ object Lista extends App {
   println("ListaConcatenada: " + ListaConcatenada)
 
   println(concatenar(concatenar(Lista("a","b"),Lista("c", "d")),Lista2))
+
+  println("FoldLeft suma de lista " + Lista1 +": " + foldLeft(Lista1, 0)(_+_))
+  println("FoldRight suma de lista " + Lista1 +": " + foldRight(Lista1, 0)(_+_))
 
 }
