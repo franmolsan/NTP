@@ -115,17 +115,24 @@ object Lista extends App {
    * @tparam B
    * @return
    */
+    @annotation.tailrec
   def foldRight[A, B](lista : Lista[A], neutro : B)(funcion : (A, B) => B): B = {
 
     println("recibo lista: " + lista)
     println("recibo neutro: " +  neutro)
 
-    if (longitud(lista)==0) neutro
-    else {
-      lista match {
-        case Cons(cabeza, cola) => foldRight(cola, funcion(cabeza, neutro))(funcion)
-      }
-    }
+//    if (longitud(lista)==0) neutro
+//    else {
+//      lista match {
+//        case Cons(cabeza, cola) => foldRight(cola, funcion(cabeza, neutro))(funcion)
+//      }
+//    }
+
+//    if (longitud(lista) == 1)  funcion
+//    lista match {
+//      case Nil => neutro
+//      case Cons(cabeza,cola) => concatenar(Lista(cabeza),Lista(foldRight(cola,neutro)(funcion)))//foldRight(cola,funcion(cabeza,neutro))(funcion)
+//    }
   }
 
   /**
@@ -151,7 +158,12 @@ object Lista extends App {
    * @tparam A
    * @return
    */
-  def asignarCabeza[A](lista : Lista[A], cabezaNueva : A) : Lista[A] = ???
+  def asignarCabeza[A](lista : Lista[A], cabezaNueva : A) : Lista[A] = {
+    lista match {
+      case Nil => Lista(cabezaNueva)
+      case Cons(cabeza,cola) => Cons(cabezaNueva,cola)
+    }
+  }
 
   /**
    * Elimina el elemento cabeza de la lista
@@ -159,7 +171,12 @@ object Lista extends App {
    * @tparam A
    * @return
    */
-  def tail[A](lista : Lista[A]): Lista[A] = ???
+  def tail[A](lista : Lista[A]): Lista[A] = {
+    lista match {
+      case Nil => Nil
+      case Cons(cabeza,cola) => cola
+    }
+  }
 
   /**
    * Elimina los n primeros elementos de una lista
@@ -168,7 +185,13 @@ object Lista extends App {
    * @tparam A tipo de datos
    * @return
    */
-  def eliminar[A](lista : Lista[A], n: Int) : Lista[A] = ???
+  def eliminar[A](lista : Lista[A], n: Int) : Lista[A] = {
+    if (n == 0) lista
+    else lista match {
+      case Nil => lista
+      case Cons(cabeza,cola) => eliminar(cola,n-1)
+    }
+  }
 
   /**
    * Elimina elementos mientra se cumple la condicion pasada como
@@ -223,5 +246,12 @@ object Lista extends App {
 
   println("FoldLeft suma de lista " + Lista1 +": " + foldLeft(Lista1, 0)(_+_))
   println("FoldRight suma de lista " + Lista1 +": " + foldRight(Lista1, 0)(_+_))
+
+  println(asignarCabeza(Lista1,83))
+  println("Tail de la lista " + Lista1 + " : " + tail(Lista1))
+
+  println("Eliminar 2 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,2))
+  println("Eliminar 3 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,3))
+  println("Eliminar 4 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,4))
 
 }
