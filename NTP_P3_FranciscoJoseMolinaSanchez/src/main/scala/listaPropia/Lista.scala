@@ -115,24 +115,20 @@ object Lista extends App {
    * @tparam B
    * @return
    */
-    @annotation.tailrec
+
   def foldRight[A, B](lista : Lista[A], neutro : B)(funcion : (A, B) => B): B = {
 
-    println("recibo lista: " + lista)
-    println("recibo neutro: " +  neutro)
+    def go (listaActual: Lista[A], acum: B) : B = {
+      lista match {
+        case Cons(cabeza,cola) => if(longitud(cola) == 0) funcion(cabeza,neutro)
+        else {
+          go(cola, acum)
+        }
+      }
+    }
 
-//    if (longitud(lista)==0) neutro
-//    else {
-//      lista match {
-//        case Cons(cabeza, cola) => foldRight(cola, funcion(cabeza, neutro))(funcion)
-//      }
-//    }
-
-//    if (longitud(lista) == 1)  funcion
-//    lista match {
-//      case Nil => neutro
-//      case Cons(cabeza,cola) => concatenar(Lista(cabeza),Lista(foldRight(cola,neutro)(funcion)))//foldRight(cola,funcion(cabeza,neutro))(funcion)
-//    }
+    //foldRight(lista,)
+    neutro
   }
 
   /**
@@ -201,7 +197,15 @@ object Lista extends App {
    * @tparam A tipo de datos a usar
    * @return
    */
-  def eliminarMientras[A](lista : Lista[A], criterio: A => Boolean) : Lista[A] = ???
+  def eliminarMientras[A](lista : Lista[A], criterio: A => Boolean) : Lista[A] = {
+    lista match {
+      case Nil => lista
+      case Cons(cabeza,cola) =>
+        if (criterio(cabeza)) eliminarMientras(cola,criterio)
+        else lista
+    }
+
+  }
   /**
    * Elimina el ultimo elemento de la lista. Aqui no se pueden compartir
    * datos en los objetos y hay que generar una nueva lista copiando
@@ -211,7 +215,18 @@ object Lista extends App {
    * @return
    */
   def eliminarUltimo[A](lista : Lista[A]) : Lista[A] = {
-    ???
+
+    @annotation.tailrec
+    def go[A](listaRestante : Lista[A], listaActual: Lista[A]) : Lista[A] = {
+      listaRestante match {
+        case Cons(cabeza,cola) => if (longitud(cola) == 0) listaActual
+        else {
+          go(cola, concatenar(listaActual,Lista(cabeza)))
+        }
+      }
+
+    }
+    go(lista, Lista())
   }
 
   /**
@@ -254,4 +269,10 @@ object Lista extends App {
   println("Eliminar 3 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,3))
   println("Eliminar 4 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,4))
 
+  val predicadoCondicion: (Int) => Boolean = (num) => num < 3
+
+  println("elminar mientras " + predicadoCondicion + ": " + eliminarMientras(Lista1, predicadoCondicion))
+
+  println("eliminar ultimo: " + eliminarUltimo(Lista1))
+  println("eliminar ultimo: " + eliminarUltimo(concatenar(Lista1,Lista2)))
 }
