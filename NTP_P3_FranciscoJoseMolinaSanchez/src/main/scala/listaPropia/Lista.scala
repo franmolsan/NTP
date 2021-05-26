@@ -115,20 +115,14 @@ object Lista extends App {
    * @tparam B
    * @return
    */
-
   def foldRight[A, B](lista : Lista[A], neutro : B)(funcion : (A, B) => B): B = {
 
-    def go (listaActual: Lista[A], acum: B) : B = {
-      lista match {
-        case Cons(cabeza,cola) => if(longitud(cola) == 0) funcion(cabeza,neutro)
-        else {
-          go(cola, acum)
-        }
-      }
+    lista match {
+      case Nil => neutro
+      case Cons(cabeza,cola) => if(longitud(cola) == 0) funcion(cabeza,neutro)
+      else funcion(cabeza,foldRight(cola,neutro)(funcion))
     }
 
-    //foldRight(lista,)
-    neutro
   }
 
   /**
@@ -136,14 +130,18 @@ object Lista extends App {
    * @param listaEnteros
    * @return
    */
-  def sumaFoldRight(listaEnteros : Lista[Int]) : Double = ???
+  def sumaFoldRight(listaEnteros : Lista[Int]) : Double = {
+    foldRight(listaEnteros,0.0)(_+_)
+  }
 
   /**
    * Producto mediante foldRight
    * @param listaEnteros
    * @return
    */
-  def productoFoldRight(listaEnteros : Lista[Int]) : Double = ???
+  def productoFoldRight(listaEnteros : Lista[Int]) : Double = {
+    foldRight(listaEnteros,1.0)(_*_)
+  }
 
   /**
    * Reemplaza la cabeza por nuevo valor. Se asume que si la lista esta vacia
@@ -261,6 +259,11 @@ object Lista extends App {
 
   println("FoldLeft suma de lista " + Lista1 +": " + foldLeft(Lista1, 0)(_+_))
   println("FoldRight suma de lista " + Lista1 +": " + foldRight(Lista1, 0)(_+_))
+
+  println("suma FoldRight: " + sumaFoldRight(ListaConcatenada))
+  println("producto FoldRight: " + productoFoldRight(ListaConcatenada))
+  println("suma normal: " + sumaEnteros(ListaConcatenada))
+  println("producto normal: " + productoEnteros(ListaConcatenada))
 
   println(asignarCabeza(Lista1,83))
   println("Tail de la lista " + Lista1 + " : " + tail(Lista1))
