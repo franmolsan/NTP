@@ -88,5 +88,4 @@ class ListaTest extends AnyFunSuite{
     assert(foldLeft(ListaEnterosPropia,1)(_/_) == ListaEnterosScala.foldLeft(1)(_/_))
   }
 
-
 }

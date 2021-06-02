@@ -1,3 +1,4 @@
-[debug] not up to date. inChanged = true, force = false
-[debug] Updating ProjectRef(uri("file:/C:/Users/franm/Documents/GitHub/NTP/NTP_P3_FranciscoJoseMolinaSanchez/"), "ntp_p3_franciscojosemolinasanchez")...
-[debug] Done updating ProjectRef(uri("file:/C:/Users/franm/Documents/GitHub/NTP/NTP_P3_FranciscoJoseMolinaSanchez/"), "ntp_p3_franciscojosemolinasanchez")
+[warn] scala-library-2.13.6-sources.jar no longer exists at C:\Users\franm\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-library\2.13.6\scala-library-2.13.6-sources.jar
+[debug] not up to date. inChanged = false, force = false
+[debug] Updating ProjectRef(uri("file:/C:/Users/Usuario/Documents/GitHub/NTP/NTP_P3_FranciscoJoseMolinaSanchez/"), "ntp_p3_franciscojosemolinasanchez")...
+[debug] Done updating ProjectRef(uri("file:/C:/Users/Usuario/Documents/GitHub/NTP/NTP_P3_FranciscoJoseMolinaSanchez/"), "ntp_p3_franciscojosemolinasanchez")
