@@ -1,4 +1,5 @@
 package arbolPropio
+
 /**
  * Interfaz generica para el árbol
  *
@@ -15,8 +16,7 @@ sealed trait ArbolBinario[+A] {
 case object ArbolVacio extends ArbolBinario[Nothing] {
   def estaVacio = true
   def add[A](nuevoElemento: A): ArbolBinario[A] = {
-    println("ejecuto el add de arbol vacio")
-    Cons(nuevoElemento, ArbolVacio, ArbolVacio)
+    Cons(nuevoElemento, ArbolVacio, ArbolVacio, 0)
   }
 }
 
@@ -28,19 +28,20 @@ case object ArbolVacio extends ArbolBinario[Nothing] {
  * @param dcha el nodo hijo por la derecha
  * @tparam A
  */
-case class Cons[A](valor : A, izq: ArbolBinario[A], dcha: ArbolBinario[A]) extends ArbolBinario[A] {
+case class Cons[A](valor : A, izq: ArbolBinario[A], dcha: ArbolBinario[A], profundidad: Int) extends ArbolBinario[A] {
   def estaVacio = false
   override def toString = valor + " " + izq.toString + " " + dcha.toString
   def add[A](nuevoElemento: A): ArbolBinario[A] = {
-    println("ejecuto el add de Cons")
-    izq match {
-      case ArbolVacio => izq.add(nuevoElemento)
-      case _ => {
-        println("matcho dcha")
-        dcha match {
-          case ArbolVacio => dcha.add(nuevoElemento)
-          case _ => izq.add(nuevoElemento)
-        }
+    if(izq.estaVacio) Cons(valor ,izq.add(nuevoElemento),dcha, profundidad+1).asInstanceOf[Cons[A]]
+    else if (dcha.estaVacio) Cons(valor,izq,dcha.add(nuevoElemento), profundidad+1 ).asInstanceOf[Cons[A]]
+    else {
+      izq match {
+        case Cons(valorIzq,izqIzq,dchaIzq,profIzq) =>
+          dcha match {
+            case Cons(valorDcha,izqDcha,dchaDcha,profDcha) =>
+              if ((profIzq - profDcha) > 1) Cons(valor,izq,dcha.add(nuevoElemento), profundidad+1).asInstanceOf[Cons[A]]
+              else Cons(valor ,izq.add(nuevoElemento),dcha, profundidad+1).asInstanceOf[Cons[A]]
+          }
       }
     }
   }
@@ -52,10 +53,10 @@ object ArbolBinario extends App{
 
     def go (nodoPadre: ArbolBinario[A], elementosRestantes: A*) : ArbolBinario[A] ={
       println("elementos restantes: " + elementosRestantes)
-      println("arbol actual:")
+      println("arbol actual: " + nodoPadre)
       if(elementosRestantes.isEmpty) nodoPadre
       else {
-        go(nodoPadre.add(elementos.head),elementosRestantes.tail:_*)
+        go(nodoPadre.add(elementosRestantes.head),elementosRestantes.tail:_*)
 //        nodoPadre match {
 //          case Cons(valor,izq,dcha) =>
 //            add(elementos(elementoActual))
@@ -65,8 +66,6 @@ object ArbolBinario extends App{
       }
     }
 
-    //val nodoInicial = Cons(elementos(0),Nil,Nil,Nil)
-    //Cons(elementos(0),Nil,go(nodoInicial,1),go(nodoInicial,2))
     go(ArbolVacio,elementos:_*)
   }
 
@@ -82,5 +81,7 @@ object ArbolBinario extends App{
 
   //mostrarInOrden(ArbolBinario(1,2,3))
 
-  println(ArbolBinario(1,2,3).toString)
+   println(ArbolBinario(1,2,3,4,5,6,7,8).toString)
+
+  // println(ArbolVacio.add(1).add(2).add(3).toString)
 }
