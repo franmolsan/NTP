@@ -23,16 +23,17 @@ case object ArbolVacio extends ArbolBinario[Nothing] {
 /**
  * Clase para definir cada nodo del árbol
  * @param valor elemento del tipo A que almacena el nodo
- * @param padre el padre del nodo del árbol
  * @param izq el nodo hijo por la izquierda
  * @param dcha el nodo hijo por la derecha
  * @tparam A
  */
-case class Cons[A](valor : A, izq: ArbolBinario[A], dcha: ArbolBinario[A], profundidad: Int) extends ArbolBinario[A] {
+case class Cons[A](valor : A, izq: ArbolBinario[A], dcha: ArbolBinario[A], dprof: Int) extends ArbolBinario[A] {
   def estaVacio = false
   override def toString = valor + " " + izq.toString + " " + dcha.toString
+
   def add[A](nuevoElemento: A): ArbolBinario[A] = {
-    if(izq.estaVacio) Cons(valor ,izq.add(nuevoElemento),dcha, profundidad+1).asInstanceOf[Cons[A]]
+
+    /*if(izq.estaVacio) Cons(valor ,izq.add(nuevoElemento),dcha, profundidad+1).asInstanceOf[Cons[A]]
     else if (dcha.estaVacio) Cons(valor,izq,dcha.add(nuevoElemento), profundidad+1 ).asInstanceOf[Cons[A]]
     else {
       izq match {
@@ -43,7 +44,46 @@ case class Cons[A](valor : A, izq: ArbolBinario[A], dcha: ArbolBinario[A], profu
               else Cons(valor ,izq.add(nuevoElemento),dcha, profundidad+1).asInstanceOf[Cons[A]]
           }
       }
+    }*/
+    println("arbol actual: " + this)
+    println("elemento actual " + this.valor)
+    println("d-prof nodo actual: " + dprof)
+
+    if (dprof >= 1){
+      izq match {
+        case ArbolVacio => dprof+1
+        case _ => dprof
+      }
+      Cons(valor, izq, dcha.add(nuevoElemento), dprof-1).asInstanceOf[Cons[A]]
     }
+    else {
+      val nuevaProf = izq match {
+        case ArbolVacio => dprof+1
+        case _ => dprof
+      }
+      Cons(valor, izq.add(nuevoElemento), dcha, dprof+1).asInstanceOf[Cons[A]]
+    }
+
+/*    izq match {
+      case ArbolVacio => Cons(valor, izq.add(nuevoElemento), dcha, dprof+1).asInstanceOf[Cons[A]]
+      case Cons(valorI, izqI, dchaI, profI) =>{
+
+        println("profundidad hijo izq: " + profI)
+
+        dcha match {
+          case ArbolVacio => Cons(valor, izq, dcha.add(nuevoElemento), dprof-1).asInstanceOf[Cons[A]]
+          case Cons(valorD, izqD, dchaD, profD) => {
+
+            println("profundidad hijo dcho: " + profD)
+
+            if ((profI - profD) > 1) Cons(valor, izq, dcha.add(nuevoElemento), dprof-1).asInstanceOf[Cons[A]]
+            else Cons(valor, izq.add(nuevoElemento), dcha,dprof+1).asInstanceOf[Cons[A]]
+
+          }
+        }
+      }
+    }*/
+
   }
 }
 
@@ -52,17 +92,15 @@ object ArbolBinario extends App{
   def apply[A](elementos : A*) : ArbolBinario[A] = {
 
     def go (nodoPadre: ArbolBinario[A], elementosRestantes: A*) : ArbolBinario[A] ={
-      println("elementos restantes: " + elementosRestantes)
-      println("arbol actual: " + nodoPadre)
+
       if(elementosRestantes.isEmpty) nodoPadre
       else {
         go(nodoPadre.add(elementosRestantes.head),elementosRestantes.tail:_*)
 //        nodoPadre match {
-//          case Cons(valor,izq,dcha) =>
-//            add(elementos(elementoActual))
-//          case ArbolVacio => ArbolVacio.add(elementos(elementoActual))
-        //}
-        // Cons(elementos(elementoActual),nodoPadre,go(nodoPadre,2*elementoActual+1),go(nodoPadre,2*elementoActual+2))
+//         case Cons(valor,izq,dcha, prof) => nodoPadre.add()
+//    case ArbolVacio => ArbolVacio.add(elementos(elementoActual))
+//        }
+
       }
     }
 
