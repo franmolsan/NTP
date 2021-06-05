@@ -1,5 +1,7 @@
 package arbolPropio
 
+import arbolPropio.ArbolBinario.profundidad
+
 /**
  * Interfaz generica para el árbol
  *
@@ -7,6 +9,7 @@ package arbolPropio
  */
 sealed trait ArbolBinario[+A] {
   def estaVacio: Boolean
+  def hayHueco: Boolean
   def add[A](a: A): ArbolBinario[A]
 }
 
@@ -15,8 +18,9 @@ sealed trait ArbolBinario[+A] {
  */
 case object ArbolVacio extends ArbolBinario[Nothing] {
   def estaVacio = true
+  def hayHueco = true
   def add[A](nuevoElemento: A): ArbolBinario[A] = {
-    Cons(nuevoElemento, ArbolVacio, ArbolVacio, 0)
+    Cons(nuevoElemento, ArbolVacio, ArbolVacio)
   }
 }
 
@@ -27,99 +31,100 @@ case object ArbolVacio extends ArbolBinario[Nothing] {
  * @param dcha el nodo hijo por la derecha
  * @tparam A
  */
-case class Cons[A](valor : A, izq: ArbolBinario[A], dcha: ArbolBinario[A], dprof: Int) extends ArbolBinario[A] {
+case class Cons[A](valor : A, izq: ArbolBinario[A], dcha: ArbolBinario[A]) extends ArbolBinario[A] {
   def estaVacio = false
+  def hayHueco = izq.estaVacio || dcha.estaVacio
   override def toString = valor + " " + izq.toString + " " + dcha.toString
 
   def add[A](nuevoElemento: A): ArbolBinario[A] = {
-
-    /*if(izq.estaVacio) Cons(valor ,izq.add(nuevoElemento),dcha, profundidad+1).asInstanceOf[Cons[A]]
-    else if (dcha.estaVacio) Cons(valor,izq,dcha.add(nuevoElemento), profundidad+1 ).asInstanceOf[Cons[A]]
-    else {
-      izq match {
-        case Cons(valorIzq,izqIzq,dchaIzq,profIzq) =>
-          dcha match {
-            case Cons(valorDcha,izqDcha,dchaDcha,profDcha) =>
-              if ((profIzq - profDcha) > 1) Cons(valor,izq,dcha.add(nuevoElemento), profundidad+1).asInstanceOf[Cons[A]]
-              else Cons(valor ,izq.add(nuevoElemento),dcha, profundidad+1).asInstanceOf[Cons[A]]
-          }
-      }
-    }*/
-    println("arbol actual: " + this)
-    println("elemento actual " + this.valor)
-    println("d-prof nodo actual: " + dprof)
-
-    if (dprof >= 1){
-      izq match {
-        case ArbolVacio => dprof+1
-        case _ => dprof
-      }
-      Cons(valor, izq, dcha.add(nuevoElemento), dprof-1).asInstanceOf[Cons[A]]
-    }
-    else {
-      val nuevaProf = izq match {
-        case ArbolVacio => dprof+1
-        case _ => dprof
-      }
-      Cons(valor, izq.add(nuevoElemento), dcha, dprof+1).asInstanceOf[Cons[A]]
-    }
-
-/*    izq match {
-      case ArbolVacio => Cons(valor, izq.add(nuevoElemento), dcha, dprof+1).asInstanceOf[Cons[A]]
-      case Cons(valorI, izqI, dchaI, profI) =>{
-
-        println("profundidad hijo izq: " + profI)
-
-        dcha match {
-          case ArbolVacio => Cons(valor, izq, dcha.add(nuevoElemento), dprof-1).asInstanceOf[Cons[A]]
-          case Cons(valorD, izqD, dchaD, profD) => {
-
-            println("profundidad hijo dcho: " + profD)
-
-            if ((profI - profD) > 1) Cons(valor, izq, dcha.add(nuevoElemento), dprof-1).asInstanceOf[Cons[A]]
-            else Cons(valor, izq.add(nuevoElemento), dcha,dprof+1).asInstanceOf[Cons[A]]
-
-          }
-        }
-      }
-    }*/
-
+    if (izq.estaVacio) Cons(valor,izq.add(nuevoElemento),dcha).asInstanceOf[Cons[A]]
+    else if (dcha.estaVacio) Cons(valor,izq,dcha.add(nuevoElemento)).asInstanceOf[Cons[A]]
+    else if(dcha.hayHueco && !izq.hayHueco) Cons(valor,izq,dcha.add(nuevoElemento)).asInstanceOf[Cons[A]]
+    else Cons(valor,izq.add(nuevoElemento),dcha).asInstanceOf[Cons[A]]
   }
 }
 
 object ArbolBinario extends App{
 
+  /**
+   * Metodo para permitir crear árboles sin usar new
+   * @param elementos para crear el árbol
+   * @tparam A
+   * @return
+   */
   def apply[A](elementos : A*) : ArbolBinario[A] = {
 
-    def go (nodoPadre: ArbolBinario[A], elementosRestantes: A*) : ArbolBinario[A] ={
+    /**
+     * Función interna para formar el árbol,
+     * añadiendo nuevos nodos al padre
+     * @param nodoPadre
+     * @param elementosRestantes
+     * @return
+     */
+    @annotation.tailrec
+    def go (nodoPadre: ArbolBinario[A], elementosRestantes: A*) : ArbolBinario[A] = {
 
+      // si no nos quedan elementos por añadir, devolvemos el árbol formado
       if(elementosRestantes.isEmpty) nodoPadre
-      else {
-        go(nodoPadre.add(elementosRestantes.head),elementosRestantes.tail:_*)
-//        nodoPadre match {
-//         case Cons(valor,izq,dcha, prof) => nodoPadre.add()
-//    case ArbolVacio => ArbolVacio.add(elementos(elementoActual))
-//        }
 
-      }
+      // si nos quedan elementos, continuar la recursividad
+      else go(nodoPadre.add(elementosRestantes.head),elementosRestantes.tail:_*)
     }
 
+    // desencadenar recursividad
     go(ArbolVacio,elementos:_*)
   }
 
-/*  def mostrarInOrden[A](nodo : ArbolBinario[A]) : String = {
+  def mostrarInOrden[A](nodo : ArbolBinario[A]) : String = {
     nodo match {
-      case Cons(valor,padre,izq,dcha) => {
+      case Cons(valor,izq,dcha) => {
         mostrarInOrden(izq) +
         valor.toString +
         mostrarInOrden(dcha)
       }
+      case _ => ""
     }
-  }*/
+  }
 
-  //mostrarInOrden(ArbolBinario(1,2,3))
+  def profundidad[A](arbolBinario: ArbolBinario[A]) : Int = {
 
-   println(ArbolBinario(1,2,3,4,5,6,7,8).toString)
+    /**
+     * Función interna para calcular la profundidad de un árbol
+     * @param arbolActual
+     * @param profActual
+     * @return la profundidad del árbol
+     */
+    @annotation.tailrec
+    def go (arbolActual: ArbolBinario[A], profActual: Int): Int = {
+      arbolActual match {
 
-  // println(ArbolVacio.add(1).add(2).add(3).toString)
+        // si el árbol está vacío, es porque ya hemos terminado
+        // sin embargo, justo antes hemos aumentado el acumulador
+        // por lo que tenemos que disminuirlo para devolver la profundidad correcta
+        case ArbolVacio => profActual-1
+
+        // si el árbol no está vacío, aumentar el acumulador
+        case Cons(valor, izq, dcha) =>
+          go(izq,profActual+1)
+      }
+    }
+
+    // comporbar el árbol que nos han pasado
+    arbolBinario match {
+      // si está vacío, directamente devolvemos que la profundidad es -1
+      case ArbolVacio => 0
+      // si no está vacío, calculamos la profundidad
+      case _ => go(arbolBinario,0)
+    }
+  }
+
+  val arbol = ArbolBinario(1,2,3,4,5,6,7,8)
+  println(arbol)
+  println(profundidad(arbol))
+
+  var arbol2 = ArbolBinario(2,4,5,6,456,9456,863)
+  println(arbol2)
+  println(profundidad(arbol2))
+
+  mostrarInOrden(arbol)
 }
