@@ -128,7 +128,7 @@ object ArbolBinario extends App{
             if(izquierdaRecorrida) {
               //println("recorro derecha ")
               listaNodo(dcha)
-              go(arbol,0,profObjetivo+1,false)
+               //go(arbol,0,profObjetivo,false)
             }
             else {
               //println("recorro izquierda ")
@@ -145,12 +145,11 @@ object ArbolBinario extends App{
         nodoActual match {
           case Cons(valor,izq,dcha) => {
 
-            if (izquierdaRecorrida){
-              go(dcha,profActual+1,profObjetivo,izquierdaRecorrida)
-            }
-            else {
-              go(izq,profActual+1,profObjetivo,izquierdaRecorrida)
-            }
+            go(izq,profActual+1,profObjetivo,izquierdaRecorrida)
+            go(dcha,profActual+1,profObjetivo,izquierdaRecorrida)
+
+            go(arbol,0,profObjetivo+1, false)
+
           }
           case _ =>
 
