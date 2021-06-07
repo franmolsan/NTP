@@ -105,13 +105,61 @@ object ArbolBinario extends App{
     }
   }
 
-  def recorridoAnchura[A](nodo : ArbolBinario[A]) : String = {
-    nodo match {
-      case Cons(valor,izq,dcha) => {
-        recorridoPosOrden(izq) + recorridoPosOrden(dcha) + valor.toString
+  def recorridoAnchura[A](arbol : ArbolBinario[A]) : Unit = {
+
+    def go(nodoActual: ArbolBinario[A], profActual: Int, profObjetivo: Int, izquierdaRecorrida: Boolean): Unit ={
+
+      //println("profundidad actual: " + profActual + " prof objetivo: " +profObjetivo + " izqu recorrida: " + izquierdaRecorrida)
+      //println("nodo actual: " + nodoActual)
+
+      def listaNodo(nodo : ArbolBinario[A]) = {
+        nodo match {
+          case Cons(valor,izq,dcha) => print(valor.toString)
+          case _ => print("")
+        }
       }
-      case _ => ""
+
+      if(profActual == profObjetivo){
+
+        //println("estoy en profundidad objetivo ")
+
+        nodoActual match {
+          case Cons(valor,izq,dcha) => {
+            if(izquierdaRecorrida) {
+              //println("recorro derecha ")
+              listaNodo(dcha)
+              go(arbol,0,profObjetivo+1,false)
+            }
+            else {
+              //println("recorro izquierda ")
+              listaNodo(izq)
+              go(arbol,0,profObjetivo,true)
+            }
+          }
+          case _ =>
+
+        }
+      }
+      else {
+        //println("NO estoy en profundidad objetivo ")
+        nodoActual match {
+          case Cons(valor,izq,dcha) => {
+
+            if (izquierdaRecorrida){
+              go(dcha,profActual+1,profObjetivo,izquierdaRecorrida)
+            }
+            else {
+              go(izq,profActual+1,profObjetivo,izquierdaRecorrida)
+            }
+          }
+          case _ =>
+
+        }
+      }
     }
+
+    go(arbol,0,0,false)
+
   }
 
   def profundidad[A](arbolBinario: ArbolBinario[A]) : Int = {
@@ -157,4 +205,6 @@ object ArbolBinario extends App{
   println("print inorden " +  recorridoInOrden(arbol))
   println("print posorden " + recorridoPosOrden(arbol))
   println("print preorden " + recorridoPreOrden(arbol))
+
+  recorridoAnchura(arbol)
 }
