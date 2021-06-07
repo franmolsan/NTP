@@ -75,12 +75,40 @@ object ArbolBinario extends App{
     go(ArbolVacio,elementos:_*)
   }
 
-  def mostrarInOrden[A](nodo : ArbolBinario[A]) : String = {
+  def recorridoInOrden[A](nodo : ArbolBinario[A]) : String = {
     nodo match {
       case Cons(valor,izq,dcha) => {
-        mostrarInOrden(izq) +
+        recorridoInOrden(izq) +
         valor.toString +
-        mostrarInOrden(dcha)
+        recorridoInOrden(dcha)
+      }
+      case _ => ""
+    }
+  }
+
+  def recorridoPreOrden[A](nodo : ArbolBinario[A]) : String = {
+    nodo match {
+      case Cons(valor,izq,dcha) => {
+        valor.toString +
+        recorridoPreOrden(izq) + recorridoPreOrden(dcha)
+      }
+      case _ => ""
+    }
+  }
+
+  def recorridoPosOrden[A](nodo : ArbolBinario[A]) : String = {
+    nodo match {
+      case Cons(valor,izq,dcha) => {
+        recorridoPosOrden(izq) + recorridoPosOrden(dcha) + valor.toString
+      }
+      case _ => ""
+    }
+  }
+
+  def recorridoAnchura[A](nodo : ArbolBinario[A]) : String = {
+    nodo match {
+      case Cons(valor,izq,dcha) => {
+        recorridoPosOrden(izq) + recorridoPosOrden(dcha) + valor.toString
       }
       case _ => ""
     }
@@ -126,5 +154,7 @@ object ArbolBinario extends App{
   println(arbol2)
   println(profundidad(arbol2))
 
-  mostrarInOrden(arbol)
+  println("print inorden " +  recorridoInOrden(arbol))
+  println("print posorden " + recorridoPosOrden(arbol))
+  println("print preorden " + recorridoPreOrden(arbol))
 }
