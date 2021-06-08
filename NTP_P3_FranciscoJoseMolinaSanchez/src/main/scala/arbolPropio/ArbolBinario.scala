@@ -2,6 +2,9 @@ package arbolPropio
 
 import arbolPropio.ArbolBinario.profundidad
 
+import scala.collection.immutable.Queue
+import scala.collection.mutable.ListBuffer
+
 /**
  * Interfaz generica para el árbol
  *
@@ -161,6 +164,33 @@ object ArbolBinario extends App{
 
   }
 
+
+  def recorridoAnchuraCola[A](arbol : ArbolBinario[A]) : String = {
+
+    def go(listaNodos: ListBuffer[ArbolBinario[A]], cadena: String): String = {
+      if (listaNodos.isEmpty) cadena
+      else {
+        val nodoActual = listaNodos.head
+        nodoActual match {
+          case Cons(valor,izq,dcha) =>{
+            if (!izq.estaVacio) listaNodos += izq
+            if (!dcha.estaVacio) listaNodos += dcha
+            go(listaNodos.tail,cadena+valor.toString)
+          }
+        }
+      }
+    }
+    go(ListBuffer(arbol),"")
+  }
+
+  def size[A](arbolBinario: ArbolBinario[A]) : Int = {
+
+    arbolBinario match {
+      case ArbolVacio => 0
+      case Cons(valor,izq,dcha) => 1 + size(izq) + size(dcha)
+    }
+  }
+
   def profundidad[A](arbolBinario: ArbolBinario[A]) : Int = {
 
     /**
@@ -193,6 +223,28 @@ object ArbolBinario extends App{
     }
   }
 
+  def sumarValoresHojas(arbolBinario: ArbolBinario[Int]) : Double = {
+
+    arbolBinario match {
+      case Cons(valor, izq, dcha) => {
+        if(izq.estaVacio && dcha.estaVacio) valor
+        else sumarValoresHojas(izq) + sumarValoresHojas(dcha)
+      }
+      case _ => 0
+    }
+  }
+
+  def aplicarFuncionHojas[A, B](arbolBinario: ArbolBinario[A],neutro: A)(funcion : (A, A) => A) : A = {
+
+    arbolBinario match {
+      case Cons(valor, izq, dcha) => {
+        if(izq.estaVacio && dcha.estaVacio) valor
+        else funcion(aplicarFuncionHojas(izq,neutro)(funcion),aplicarFuncionHojas(dcha,neutro)(funcion))
+      }
+      case _ => neutro
+    }
+  }
+
   val arbol = ArbolBinario(1,2,3,4,5,6,7,8)
   println(arbol)
   println(profundidad(arbol))
@@ -205,5 +257,10 @@ object ArbolBinario extends App{
   println("print posorden " + recorridoPosOrden(arbol))
   println("print preorden " + recorridoPreOrden(arbol))
 
-  recorridoAnchura(arbol)
+  println(recorridoAnchuraCola(arbol))
+  println("tamaño del arbol: " + size(arbol))
+
+  println("suma valores de las hojas " + sumarValoresHojas(arbol))
+
+  println("aplicar multiplicacion a hojas " + aplicarFuncionHojas(arbol,1)(_*_))
 }
