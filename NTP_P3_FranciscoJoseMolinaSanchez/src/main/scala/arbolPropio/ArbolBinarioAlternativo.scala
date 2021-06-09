@@ -3,30 +3,62 @@ package arbolPropio
 import scala.collection.mutable.ListBuffer
 
 /**
- * Interfaz generica para la lista
+ * Interfaz generica para el árbol
  *
  * @tparam A
  */
-sealed trait ArbolBinario[+A]
+sealed trait ArbolBinarioAlternativo[+A] {
+  def estaVacio: Boolean
+  def hayHueco: Boolean
+  def add[A](a: A): ArbolBinarioAlternativo[A]
+}
 
 /**
- * Clase para representar los nodos internos del árbol
- * Estos nodos no almacenan valor
- * @param hijoIzq
- * @param hijoDcha
- * @tparam A
+ * Objeto para definir árbol binario vacío
  */
-case class NodoInterno[+A](hijoIzq: ArbolBinario[A], hijoDcha: ArbolBinario[A]) extends ArbolBinario[A]
+case object ArbolVacio extends ArbolBinarioAlternativo[Nothing] {
+  def estaVacio = true
+  def hayHueco = true
+  def add[A](nuevoElemento: A): ArbolBinarioAlternativo[A] = {
+    Nodo(nuevoElemento, ArbolVacio, ArbolVacio)
+  }
+}
 
 /**
- * Clase para representar los nodos hoja del árbol
- * Estos nodos sí almacenan un valor
- * @param valor
+ * Clase para definir cada nodo del árbol
+ * @param valor elemento del tipo A que almacena el nodo
+ * @param izq el nodo hijo por la izquierda
+ * @param dcha el nodo hijo por la derecha
  * @tparam A
  */
-case class NodoHoja[+A](valor: A) extends ArbolBinario[A]
+case class Nodo[A](valor : A, izq: ArbolBinarioAlternativo[A], dcha: ArbolBinarioAlternativo[A]) extends ArbolBinarioAlternativo[A] {
+  def estaVacio = false
+  def hayHueco = izq.estaVacio || dcha.estaVacio
+  override def toString = valor + " " + izq.toString + " " + dcha.toString
 
-object ArbolBinario extends App{
+  /**
+   * Función para insertar un nuevo elmemento en el árbol
+   * de forma que esté balanceado
+   * @param nuevoElemento
+   * @tparam A
+   * @return
+   */
+  def add[A](nuevoElemento: A): ArbolBinarioAlternativo[A] = {
+    // primero comprobamos si algún hijo está vacío e intentamos insertar en él
+    // priorizando la izquierda
+    if (izq.estaVacio) Nodo(valor,izq.add(nuevoElemento),dcha).asInstanceOf[Nodo[A]]
+    else if (dcha.estaVacio) Nodo(valor,izq,dcha.add(nuevoElemento)).asInstanceOf[Nodo[A]]
+
+    // si tiene los dos hijos
+    // comprobamos si alguno de ellos tiene un "hueco" libre para insertar un nodo
+    // igualmente priorizamos la izquierda
+    // es decir, solo insertamos en la derecha cuando la izquierda esté ocupada
+    else if(dcha.hayHueco && !izq.hayHueco) Nodo(valor,izq,dcha.add(nuevoElemento)).asInstanceOf[Nodo[A]]
+    else Nodo(valor,izq.add(nuevoElemento),dcha).asInstanceOf[Nodo[A]]
+  }
+}
+
+object ArbolBinarioAlternativo extends App{
 
   /**
    * Metodo para permitir crear árboles sin usar new
@@ -34,43 +66,56 @@ object ArbolBinario extends App{
    * @tparam A
    * @return
    */
-  def apply[A](elementos : A*) : ArbolBinario[A] = {
+  def apply[A](elementos : A*) : ArbolBinarioAlternativo[A] = {
 
-    if (elementos.size == 1) NodoHoja(elementos.head)
-    else {
-      val listaDividida =  elementos.splitAt( (elementos.size+1)/2 )
-      NodoInterno(ArbolBinario(listaDividida._1:_*),ArbolBinario(listaDividida._2:_*))
+    /**
+     * Función interna para formar el árbol,
+     * añadiendo nuevos nodos al padre
+     * @param nodoPadre
+     * @param elementosRestantes
+     * @return
+     */
+    @annotation.tailrec
+    def go (nodoPadre: ArbolBinarioAlternativo[A], elementosRestantes: A*) : ArbolBinarioAlternativo[A] = {
+
+      // si no nos quedan elementos por añadir, devolvemos el árbol formado
+      if(elementosRestantes.isEmpty) nodoPadre
+
+      // si nos quedan elementos, continuar la recursividad
+      else go(nodoPadre.add(elementosRestantes.head),elementosRestantes.tail:_*)
     }
 
+    // desencadenar recursividad
+    go(ArbolVacio,elementos:_*)
   }
 
-  def recorridoInOrden[A](nodo : ArbolBinario[A]) : String = {
+  def recorridoInOrden[A](nodo : ArbolBinarioAlternativo[A]) : String = {
     nodo match {
-      case NodoInterno(hijoIzq,hijoDcha) => {
-        recorridoInOrden(hijoIzq) + " Interno " +
-          recorridoInOrden(hijoDcha)
+      case Nodo(valor,izq,dcha) => {
+        recorridoInOrden(izq) +
+        valor.toString +
+        recorridoInOrden(dcha)
       }
-        case NodoHoja(valor) => valor.toString + " "
+      case _ => ""
     }
   }
 
-  def recorridoPreOrden[A](nodo : ArbolBinario[A]) : String = {
+  def recorridoPreOrden[A](nodo : ArbolBinarioAlternativo[A]) : String = {
     nodo match {
-      case NodoInterno(hijoIzq,hijoDcha) => {
-        "Interno " +
-        recorridoPreOrden(hijoIzq) +
-        recorridoPreOrden(hijoDcha)
+      case Nodo(valor,izq,dcha) => {
+        valor.toString +
+        recorridoPreOrden(izq) + recorridoPreOrden(dcha)
       }
-      case NodoHoja(valor) => valor.toString + " "
+      case _ => ""
     }
   }
 
-  def recorridoPosOrden[A](nodo : ArbolBinario[A]) : String = {
+  def recorridoPosOrden[A](nodo : ArbolBinarioAlternativo[A]) : String = {
     nodo match {
-      case NodoInterno(hijoIzq,hijoDcha) => {
-        recorridoPosOrden(hijoIzq) + recorridoPosOrden(hijoDcha) + "Interno "
+      case Nodo(valor,izq,dcha) => {
+        recorridoPosOrden(izq) + recorridoPosOrden(dcha) + valor.toString
       }
-      case NodoHoja(valor) => valor.toString + " "
+      case _ => ""
     }
   }
 
@@ -97,7 +142,7 @@ object ArbolBinario extends App{
             if(izquierdaRecorrida) {
               //println("recorro derecha ")
               listaNodo(dcha)
-              //go(arbol,0,profObjetivo,false)
+               //go(arbol,0,profObjetivo,false)
             }
             else {
               //println("recorro izquierda ")
@@ -232,17 +277,22 @@ object ArbolBinario extends App{
     }
   }
 
-  val arbol = ArbolBinario(1,2,3,4,5,6)
+  val arbol = ArbolBinarioAlternativo(1,2,3,4,5,6,7,8)
   println(arbol)
+  println(profundidad(arbol))
+
+  var arbol2 = ArbolBinarioAlternativo(2,4,5,6,456,9456,863)
+  println(arbol2)
+  println(profundidad(arbol2))
 
   println("print inorden " +  recorridoInOrden(arbol))
   println("print posorden " + recorridoPosOrden(arbol))
   println("print preorden " + recorridoPreOrden(arbol))
 
-/*  println(recorridoAnchuraCola(arbol))
+  println(recorridoAnchuraCola(arbol))
   println("tamaño del arbol: " + size(arbol))
 
   println("suma valores de las hojas " + sumarValoresHojas(arbol))
 
-  println("aplicar multiplicacion a hojas " + aplicarFuncionHojas(arbol,1)(_*_))*/
+  println("aplicar multiplicacion a hojas " + aplicarFuncionHojas(arbol,1)(_*_))
 }
