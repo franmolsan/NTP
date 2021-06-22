@@ -402,7 +402,7 @@ object ArbolBinarioAlternativo{
    * @param args
    */
   def main(args: Array[String]): Unit = {
-    val arbol = ArbolBinarioAlternativo()
+    val arbol = ArbolBinarioAlternativo(1,2,3,4,5)
     println("Árbol" + arbol)
     println(stringArbol(arbol))
     println("Profundidad del árbol: " + profundidad(arbol))

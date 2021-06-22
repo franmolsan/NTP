@@ -345,7 +345,13 @@ object Lista {
   }
 
 
-
+  /**
+   * Devuelve la lista que recibe por parámetro en forma de string
+   * Para poder imprimirla con formato
+   * @param lista
+   * @tparam A
+   * @return
+   */
   def stringLista[A](lista : Lista[A]) : String = {
 
     @annotation.tailrec

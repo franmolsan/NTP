@@ -422,7 +422,7 @@ object ArbolBinario{
    * @param args
    */
   def main(args: Array[String]): Unit = {
-    val arbol1 = ArbolBinario(1,2,3,4,5,6,7,8)
+    val arbol1 = ArbolBinario(1,2,3,4,5)
     println("Árbol 1: " + arbol1)
     println("Recorrido inorden: " +  recorridoInOrden(arbol1))
     println("Recorrido posorden: " + recorridoPosOrden(arbol1))
