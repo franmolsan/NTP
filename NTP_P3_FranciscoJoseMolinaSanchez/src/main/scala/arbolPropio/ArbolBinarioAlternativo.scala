@@ -88,36 +88,90 @@ object ArbolBinarioAlternativo{
     go(ArbolVacio,elementos:_*)
   }
 
+  /**
+   * Método para realizar el recorrido en profundidad inorden
+   * (la raíz se visita tras recorrer el hijo izquierdo
+   * y antes de recorrer el derecho)
+   * @param nodo
+   * @tparam A
+   * @return
+   */
   def recorridoInOrden[A](nodo : ArbolBinarioAlternativo[A]) : String = {
+
+    // comprobamos el nodo actual
     nodo match {
+
+      // recorrer el hijo izquierdo,
+      // luego el valor del nodo actual
+      // y finalmente recorrer el hijo derecho
       case Nodo(valor,izq,dcha) => {
         recorridoInOrden(izq) +
-        valor.toString +
+        valor.toString + " " +
         recorridoInOrden(dcha)
       }
+
+      // en otro caso, (p.ej. nodo vacío) devolver cadena vacía
       case _ => ""
     }
   }
 
+  /**
+   * Método para realizar el recorrido en profundidad preorden
+   * (la raíz se visita primero, luego el hijo izquierdo
+   * y finalmente el hijo derecho)
+   * @param nodo
+   * @tparam A
+   * @return
+   */
   def recorridoPreOrden[A](nodo : ArbolBinarioAlternativo[A]) : String = {
+
+    // comprobamos el nodo actual
     nodo match {
+
+      // devolver el valor del nodo actual,
+      // luego recorrer el hijo izquierdo
+      // y finalmente recorrer el hijo derecho
       case Nodo(valor,izq,dcha) => {
-        valor.toString +
+        valor.toString + " " +
         recorridoPreOrden(izq) + recorridoPreOrden(dcha)
       }
+
+      // en otro caso, (p.ej. nodo vacío) devolver cadena vacía
       case _ => ""
     }
   }
 
+  /**
+   * Método para realizar el recorrido en profundidad posorden
+   * (primero se visita el hijo izquierdo, luego el derecho
+   * y finalmente la raíz)
+   * @param nodo
+   * @tparam A
+   * @return
+   */
   def recorridoPosOrden[A](nodo : ArbolBinarioAlternativo[A]) : String = {
+
+    // comprobamos el nodo actual
     nodo match {
+
+      // recorrer el hijo izquierdo,
+      // luego recorrer el hijo derecho
+      // y finalmente devolver el valor del nodo actual
       case Nodo(valor,izq,dcha) => {
-        recorridoPosOrden(izq) + recorridoPosOrden(dcha) + valor.toString
+        recorridoPosOrden(izq) + recorridoPosOrden(dcha) + valor.toString + " "
       }
+
+      // en otro caso, (p.ej. nodo vacío) devolver cadena vacía
       case _ => ""
     }
   }
 
+  /**
+   * Método para realizar el recorrido en anchura del árbol
+   * @param arbol
+   * @tparam A
+   * @return
+   */
   def recorridoAnchura[A](arbol : ArbolBinarioAlternativo[A]) : String = {
 
     /**
@@ -147,8 +201,9 @@ object ArbolBinarioAlternativo{
             // llamar recursivamente a la función,
             // eliminando el nodo procesado (con tail)
             // y añadiendo a la cadena el valor actual del nodo
-            go(listaNodos.tail,cadena+valor.toString)
+            go(listaNodos.tail,cadena+valor.toString+" ")
           }
+          case _ => ""
         }
       }
     }
@@ -165,8 +220,13 @@ object ArbolBinarioAlternativo{
    */
   def numTotalNodos[A](arbolBinario: ArbolBinarioAlternativo[A]) : Int = {
 
+    // comprobamos el nodo actual
     arbolBinario match {
+
+      // si es vacío, no sumamos nada (0)
       case ArbolVacio => 0
+
+      // si no es vacío, sumamos 1 y recorremos los hijos
       case Nodo(valor,izq,dcha) => 1 + numTotalNodos(izq) + numTotalNodos(dcha)
     }
   }
@@ -179,10 +239,19 @@ object ArbolBinarioAlternativo{
    */
   def numNodosHoja[A](arbolBinario: ArbolBinarioAlternativo[A]) : Int = {
 
+    // comprobamos el nodo actual
     arbolBinario match {
+
+      // si es vacío, no sumamos nada (0)
       case ArbolVacio => 0
+
+      // si no es vacío
       case Nodo(valor,izq,dcha) =>
+
+        // si es una hoja, devolvemos 1
         if (izq.estaVacio && dcha.estaVacio) 1
+
+        // si no es hoja, seguimos recorriendo los hijos
         else numNodosHoja(izq) + numNodosHoja(dcha)
     }
   }
@@ -195,10 +264,19 @@ object ArbolBinarioAlternativo{
    */
   def numNodosInternos[A](arbolBinario: ArbolBinarioAlternativo[A]) : Int = {
 
+    // comprobamos el nodo actual
     arbolBinario match {
+
+      // si es vacío, no sumamos nada (0)
       case ArbolVacio => 0
+
+      // si no es vacío
       case Nodo(valor,izq,dcha) =>
+
+        // si es una hoja, devolvemos 0
         if (izq.estaVacio && dcha.estaVacio) 0
+
+        // si no es una hoja, sumamos 1 y seguimos recorriendo los hijos
         else 1 + numNodosInternos(izq) + numNodosInternos(dcha)
     }
   }
@@ -255,18 +333,41 @@ object ArbolBinarioAlternativo{
     aplicarFuncionHojas(arbolBinario,0)(_+_)
   }
 
+  /**
+   * Método para aplicar una función a los valores almacenados en los nodos hoja del árbol
+   * @param arbolBinario
+   * @param neutro
+   * @param funcion
+   * @tparam A
+   * @tparam B
+   * @return
+   */
   def aplicarFuncionHojas[A, B](arbolBinario: ArbolBinarioAlternativo[A], neutro: A)(funcion : (A, A) => A) : A = {
 
+    // para cada nodo
     arbolBinario match {
+
       case Nodo(valor, izq, dcha) => {
+        // si es un nodo hoja, devolver su valor
         if(izq.estaVacio && dcha.estaVacio) valor
+
+        // si es nodo interno, continuar la recursividad por sus hijos
+        // y devolver el resultado de aplicar la función al valor devuelto por la función en sus hijos
         else funcion(aplicarFuncionHojas(izq,neutro)(funcion),aplicarFuncionHojas(dcha,neutro)(funcion))
       }
+
+      // en otro caso, devolver el elemento neutro
       case _ => neutro
     }
   }
 
-  def mostrarArbol[A](arbolBinario: ArbolBinarioAlternativo[A]) : String = {
+  /**
+   *
+   * @param arbolBinario
+   * @tparam A
+   * @return
+   */
+  def stringArbol[A](arbolBinario: ArbolBinarioAlternativo[A]) : String = {
     /**
      * Función interna para recorrer el árbol (preorden)
      * y mostrar por pantalla cada nodo
@@ -301,9 +402,9 @@ object ArbolBinarioAlternativo{
    * @param args
    */
   def main(args: Array[String]): Unit = {
-    val arbol = ArbolBinarioAlternativo(1,2,3,4,5)
+    val arbol = ArbolBinarioAlternativo()
     println("Árbol" + arbol)
-    println(mostrarArbol(arbol))
+    println(stringArbol(arbol))
     println("Profundidad del árbol: " + profundidad(arbol))
 
     println("Recorrido inorden " +  recorridoInOrden(arbol))

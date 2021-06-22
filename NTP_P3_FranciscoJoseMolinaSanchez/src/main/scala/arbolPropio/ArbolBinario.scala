@@ -144,6 +144,7 @@ object ArbolBinario{
    */
   def recorridoPosOrden[A](nodo : ArbolBinario[A]) : String = {
 
+    // comprobamos el nodo actual
     nodo match {
 
       // si es un nodo interno
