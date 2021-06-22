@@ -5,7 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class ListaTest extends AnyFunSuite{
 
-  // variables a utilizar durante las pruebas
+  // listas a utilizar durante las pruebas
   val ListaEnterosPropia = Lista(1,2,3,4,5)
   val ListaEnterosScala = List(1,2,3,4,5)
 

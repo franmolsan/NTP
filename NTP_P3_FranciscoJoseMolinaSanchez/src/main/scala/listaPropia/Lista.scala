@@ -22,7 +22,7 @@ case class Cons[+A](cabeza : A, cola : Lista[A]) extends Lista[A]
 
 // las clases case ya están definidas
 // por tanto podemos implementar el objeto Lista
-object Lista extends App {
+object Lista {
 
   /**
    * Metodo para permitir crear listas sin usar new
@@ -330,7 +330,6 @@ object Lista extends App {
    * @tparam B parametro de tipo del elemento neutro
    * @return
    */
-
   @annotation.tailrec
   def foldLeft[A, B](lista : Lista[A], neutro: B)(funcion : (B, A) => B): B = {
     lista match {
@@ -345,38 +344,63 @@ object Lista extends App {
     }
   }
 
-  val Lista1: Lista[Int] = Lista(1,2,3)
-  println("Lista: " + Lista1)
-  println("Longitud: " + longitud(Lista1))
-  println("Suma: " + sumaEnteros(Lista1))
-  println("Producto: " + productoEnteros(Lista1))
 
-  val Lista2 : Lista[Int] = Lista(4,5,6)
-  val ListaConcatenada = concatenar(Lista1,Lista2)
-  println("ListaConcatenada: " + ListaConcatenada)
 
-  println(concatenar(concatenar(Lista("a","b"),Lista("c", "d")),Lista2))
+  def stringLista[A](lista : Lista[A]) : String = {
 
-  println("FoldLeft suma de lista " + Lista1 +": " + foldLeft(Lista1, 0)(_+_))
-  println("FoldRight suma de lista " + Lista1 +": " + foldRight(Lista1, 0)(_+_))
+    @annotation.tailrec
+    def go (listaRestante: Lista[A], stringActual: String): String = {
+      listaRestante match {
+        case Nil => stringActual + "Nil"
+        // si quedan elementos en la lista
+        case Cons(cabeza,cola) => go(cola,stringActual + cabeza + " -> ")
+      }
+    }
 
-  println("suma FoldRight: " + sumaFoldRight(ListaConcatenada))
-  println("producto FoldRight: " + productoFoldRight(ListaConcatenada))
-  println("suma normal: " + sumaEnteros(ListaConcatenada))
-  println("producto normal: " + productoEnteros(ListaConcatenada))
+    // desencadenar recursividad
+    go(lista,"")
+  }
 
-  println(asignarCabeza(Lista1,83))
-  println("Tail de la lista " + Lista1 + " : " + tail(Lista1))
+  /***
+   * Método main, que no es necesario ya que el desarrollo
+   * está guiado por las pruebas
+   * @param args
+   */
+  def main(args: Array[String]): Unit = {
+    val Lista1: Lista[Int] = Lista(1,2,3)
+    println("Lista: " + stringLista(Lista1))
+    println("Longitud: " + longitud(Lista1))
+    println("Suma: " + sumaEnteros(Lista1))
+    println("Producto: " + productoEnteros(Lista1))
 
-  println("Eliminar 2 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,2))
-  println("Eliminar 3 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,3))
-  println("Eliminar 4 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,4))
+    val Lista2 : Lista[Int] = Lista(4,5,6)
+    println("Lista 2: " + stringLista(Lista2))
 
-  val predicadoCondicion: (Int) => Boolean = (num) => num < 3
+    val ListaConcatenada = concatenar(Lista1,Lista2)
+    println("Lista Concatenada: " + stringLista(ListaConcatenada))
 
-  println("elminar mientras " + predicadoCondicion + ": " + eliminarMientras(Lista1, predicadoCondicion))
+    println(stringLista(concatenar(concatenar(Lista("a","b"),Lista("c", "d")),Lista2)))
 
-  println("eliminar ultimo: " + eliminarUltimo(Lista1))
-  println("eliminar ultimo: " + eliminarUltimo(concatenar(Lista1,Lista2)))
-  println("eliminar último nil " + eliminarUltimo(Nil))
+    println("FoldLeft suma de lista " + Lista1 +": " + foldLeft(Lista1, 0)(_+_))
+    println("FoldRight suma de lista " + Lista1 +": " + foldRight(Lista1, 0)(_+_))
+
+    println("suma FoldRight: " + sumaFoldRight(ListaConcatenada))
+    println("producto FoldRight: " + productoFoldRight(ListaConcatenada))
+    println("suma normal: " + sumaEnteros(ListaConcatenada))
+    println("producto normal: " + productoEnteros(ListaConcatenada))
+
+    println(asignarCabeza(Lista1,83))
+    println("Tail de la lista " + Lista1 + " : " + tail(Lista1))
+
+    println("Eliminar 2 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,2))
+    println("Eliminar 3 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,3))
+    println("Eliminar 4 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,4))
+
+    val predicadoCondicion: (Int) => Boolean = (num) => num < 3
+
+    println("elminar mientras elemento < 3: " + stringLista(eliminarMientras(Lista1, predicadoCondicion)))
+
+    println("eliminar ultimo: " + stringLista(eliminarUltimo(Lista1)))
+
+  }
 }
