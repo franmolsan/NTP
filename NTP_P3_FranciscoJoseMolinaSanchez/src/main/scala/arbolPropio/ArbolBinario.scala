@@ -400,7 +400,7 @@ object ArbolBinario{
         // si es un nodo interno, imprimir su id
         // y seguir procesando sus hijos, recursivamente
         case NodoInterno(id,hijoIzq,hijoDcha) => {
-          println("Nodo Interno " + id);
+          println("Nodo Interno " + id)
           go(hijoIzq);
           go(hijoDcha);
         }
