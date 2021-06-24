@@ -379,23 +379,22 @@ object Lista {
     println("Suma: " + sumaEnteros(Lista1))
     println("Producto: " + productoEnteros(Lista1))
 
+    println("FoldLeft suma de lista " + Lista1 +": " + foldLeft(Lista1, 0)(_+_))
+    println("FoldRight suma de lista " + Lista1 +": " + foldRight(Lista1, 0)(_+_))
+
+
     val Lista2 : Lista[Int] = Lista(4,5,6)
     println("Lista 2: " + stringLista(Lista2))
 
     val ListaConcatenada = concatenar(Lista1,Lista2)
     println("Lista Concatenada: " + stringLista(ListaConcatenada))
 
-    println(stringLista(concatenar(concatenar(Lista("a","b"),Lista("c", "d")),Lista2)))
+    println("Suma FoldRight lista concatenada: " + sumaFoldRight(ListaConcatenada))
+    println("Producto FoldRight lista concatenada: " + productoFoldRight(ListaConcatenada))
+    println("Suma normal lista concatenada: " + sumaEnteros(ListaConcatenada))
+    println("Producto normal lista concatenada: " + productoEnteros(ListaConcatenada))
 
-    println("FoldLeft suma de lista " + Lista1 +": " + foldLeft(Lista1, 0)(_+_))
-    println("FoldRight suma de lista " + Lista1 +": " + foldRight(Lista1, 0)(_+_))
-
-    println("suma FoldRight: " + sumaFoldRight(ListaConcatenada))
-    println("producto FoldRight: " + productoFoldRight(ListaConcatenada))
-    println("suma normal: " + sumaEnteros(ListaConcatenada))
-    println("producto normal: " + productoEnteros(ListaConcatenada))
-
-    println(asignarCabeza(Lista1,83))
+    println("Lista 1 cambiando la cabeza: " + asignarCabeza(Lista1,83))
     println("Tail de la lista " + Lista1 + " : " + tail(Lista1))
 
     println("Eliminar 2 primeros elementos de lista " + Lista1 + " : " + eliminar(Lista1,2))
